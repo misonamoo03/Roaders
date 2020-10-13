@@ -1,0 +1,33 @@
+.login-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login>form {
+    display: flex;
+    flex-direction: column;
+}
+.login h1 {
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 30px;
+}
+.login input {
+    margin-bottom: 10px;
+}
+.login span {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.login input[type="submit"] {
+    width: 400px;
+    height: 40px;
+    border: 0;
+    font-weight: bold;
+    background-color: orange;
+}
+
+#logoutBtn{
+	background-color:none;
+	border:0;
+}

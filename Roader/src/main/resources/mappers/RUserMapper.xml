@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.RUserMapper">
+<!-- 로그인 하기 -->
+	<select id="login" resultType="com.misonamoo.smileway.domain.RUserVO">
+		SELECT RUSER_ID AS ruserId/* 로그인폼화면에서 가져온 값 비교하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.login | 김진호  */
+		FROM
+		ROADUSER
+		WHERE RUSER_ID = #{ruserId}
+		AND RUSER_PW = #{ruserPw}
+	</select>
+
+<!-- 회원가입 -->
+	<insert id="signUp">
+		INSERT INTO ROADUSER(   /* 회원가입화면에서 입력한 값을 등록하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.signUp | 김진호  */
+			RUSER_ID, 
+			RUSER_PW, 
+			RUSER_EMAIL, 
+			RPHONE, 
+			RUSER_NAME, 
+			RUSER_ADDRESS1,
+			RUSER_ADDRESS2, 
+			RUSER_POSTCODE,
+			RUSER_AGRE_ESSEN,
+			RUSER_AGRE_OPT,
+			RUSER_POINT
+			)
+		VALUE
+			(
+			#{ruserId},
+			#{ruserPw},
+			#{ruserEmail},
+			#{rPhone},
+			#{ruserName},
+			#{ruserAddress1},
+			#{ruserAddress2},
+			#{ruserPostCode},
+			#{ruserAgreEssen},
+			#{ruserAgreOption},
+			10000
+			)
+	</insert>
+	
+	<!-- ID값에 맞는 회원 정보 불러오기 -->
+	 <select id="read" resultType="com.misonamoo.smileway.domain.RUserVO">
+	 select 
+	   RUSER_ID AS ruserId, 
+	   RUSER_EMAIL AS ruserEmail, 
+	   RPHONE AS rPhone, 
+	   RUSER_NAME AS ruserName, 
+	   RUSER_ADDRESS1 AS ruserAddress1,
+	   RUSER_ADDRESS2 AS ruserAddress2,
+	   RUSER_POSTCODE AS ruserPostCode,
+	   RUSER_AGRE_OPT AS ruserAgreOption
+	 from 
+	   ROADUSER 
+	 where RUSER_ID = #{ruserId}
+	 </select>
+		
+	<!-- 회원정보 수정 -->
+	 <update id="update">
+ 	update ROADUSER set 
+	   RUSER_EMAIL = #{ruserEmail}, 
+	   RPHONE = #{rPhone}, 
+	   RUSER_NAME = #{ruserName},
+	   RUSER_ADDRESS1 = #{ruserAddress1},
+	   RUSER_ADDRESS2 = #{ruserAddress2},
+	   RUSER_POSTCODE = #{ruserPostCode},
+	   RUSER_AGRE_OPT = #{ruserAgreOption}
+ 	where RUSER_ID = #{ruserId}
+ 	</update>
+ 	
+	<!-- 아이디 중복 조회하기 -->
+	<select id="checkId" resultType="int">
+		select count(RUSER_ID) from ROADUSER where RUSER_ID=#{ruserId}/* 회원가입화면에서 입력한 아이디값 중복을 확인하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.checkId | 김진호  */    
+	</select>
+	
+	<!-- 이메일 중복 조회등록하기 -->
+	<select id="checkEmail" resultType="int">
+		select count(RUSER_ID) from ROADUSER where RUSER_ID=#{ruserId}/* 회원가입화면에서 입력한 이메일값 중복을 확인하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.checkEmail | 김진호  */
+	</select>
+	
+	<!-- 로그인 하기 -->
+	<select id="idChk" resultType="com.misonamoo.smileway.domain.RUserVO">
+		SELECT RUSER_ID AS ruserId/* 로그인폼화면에서 가져온 값 비교하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.idChk | 김진호  */
+		FROM
+		ROADUSER
+		WHERE RUSER_EMAIL = #{ruserEmail}
+	</select>
+	
+		<!-- 비밀번호 찾기 -->
+		<select id="getPw" parameterType="com.misonamoo.smileway.domain.RUserVO" resultType="com.misonamoo.smileway.domain.RUserVO">
+			SELECT
+				RUSER_NO AS ruserNo, 
+				RUSER_PW AS ruserPw,
+				RUSER_EMAIL AS ruserEmail,
+				RUSER_ID AS ruserId 
+			FROM 
+				ROADUSER 
+			WHERE 
+				RUSER_EMAIL = #{ruserEmail} AND RUSER_ID = #{ruserId}
+		</select>
+				<select id="pointRead" resultType="String">
+		select 
+			RUSER_POINT AS ruserPoint 
+		from 
+			ROADUSER 
+		where RUSER_ID = #{ruserId}
+	</select>
+	
+	<update id="pointUpdate">
+	/* 회원가입화면에서 입력한 값을 등록하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.signUp | 김진호  */
+		UPDATE ROADUSER SET   
+			RUSER_POINT = #{ruserPoint}
+		where RUSER_ID = #{ruserId}
+	</update>
+	
+	
+	<!-- 유저 넘버값 받아오기 -->
+	<select id="getRuserNo" resultType="String">
+		SELECT 
+			RUSER_NO AS ruserNo 
+		FROM 
+			ROADUSER 
+		WHERE 
+			RUSER_ID = #{ruserNo}
+	</select>
+	
+	<!-- 리뷰 목록 출력 -->
+	<select id="getReviewHistory" resultType="com.misonamoo.smileway.domain.PointVO">
+		SELECT
+			POINT_TYPE AS pointType,
+			POINT_UPDATE AS pointUpdate,
+			RUSER_ID AS ruserId,
+			REASON AS reason,
+			POINT_INS_TIME AS pointInsTime
+		FROM
+			ROADPOINT
+		WHERE
+			RUSER_ID = #{ruserId}
+	</select>
+	
+	<!-- 리뷰 등록(출금) -->
+	<insert id="insertReview">
+		INSERT ROADPOINT(POINT_TYPE,RUSER_ID,REASON,RUSER_POINT) VALUES (#{pointType},#{ruserId},#{reason},#{ruserPoint});
+	</insert>
+	
+	<!-- 유저 아이디 있는지 체크 -->
+	<select id="cheackNo" resultType="int">
+		select 
+			count(SEC_NO) 
+		from 
+			ROADSEC 
+		where SEC_NO=#{secNo}
+	</select>
+	
+	<!-- 코드등록 -->
+	<insert id="insertCode">
+	insert into ROADSEC(
+		SEC_NO,
+		SEC_CODE) values
+		(
+		#{secNo},
+		#{secCode}
+		)
+	</insert>
+	
+	<!-- 코드 읽어오기 -->
+	<select id="readCode" resultType="com.misonamoo.smileway.domain.CodeVO">
+		select 
+			SEC_CODE AS secCode 
+		from 
+			ROADSEC
+		where SEC_NO=#{secNo}
+	</select>
+	
+	<!-- 코드 체크 -->
+	<select id="cheackCode" resultType="int">
+		select 
+			count(SEC_CODE) AS secCode 
+		from 
+			ROADSEC
+		where SEC_CODE=#{secCode}
+	</select>
+	
+	<select id="getSecNo" resultType="String">
+		select 
+			SEC_NO AS secNo 
+		from 
+			ROADSEC 
+		where SEC_CODE=#{secCode}
+	</select>	
+	
+	<!-- 비밀번호 변경 -->
+	 <update id="updatePw">
+	 update ROADUSER set
+	 RUSER_PW = #{ruserPw}
+	 where RUSER_NO = #{ruserNo}
+	 </update>
+</mapper>
