@@ -1,0 +1,84 @@
+/*-----메인페이지-----*/
+    .header nav ul,
+    .main-header nav ul {
+        display: flex;
+    }
+    .header nav ul li,
+    .main-header nav ul li {
+        margin-right: 30px;
+        cursor: pointer;
+    }
+    .header nav ul li:last-child,
+    .main-header nav ul li:last-child {
+        margin-right: 0;
+    }
+
+/*main*/
+.main .main-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: inherit;
+
+    font-size: 30px;
+    font-weight: bold;
+}
+/*-----sub - basic-----*/
+.main .sub-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+    height: 50px;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #979797;
+}
+    .main .sub-menu ul {
+        display: flex;
+    }
+    .main .sub-menu ul li {
+        margin-right: 50px;
+    }
+    .main .sub-menu ul li:last-child {
+        margin-right: 0;
+    }
+    .main .main-container {
+        display: flex;
+        min-height: inherit;
+    }
+        .main .aside {
+            padding: 30px;
+            box-sizing: border-box;
+            min-width: 250px;
+            color: #fff;
+            background-color: #666;
+        }
+        .main .aside li {
+            padding-bottom: 20px;
+        }
+        .main .aside li a {
+            color: #fff;
+        }
+        .main .sub-main {
+            padding: 30px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+/*footer*/
+.footer h1 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+    .footer .company {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .footer .company dl {
+        display: flex;
+        margin-right: 20px;
+    }
+    .footer .company dt {
+        margin-right: 10px;
+    }

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.DeliveryMapper">
+	
+	<!-- detail 페이지를 View로 생성하여 조회하게 만듦 -->
+	<select id="deliveryDetail" resultType="com.misonamoo.smileway.domain.DeliveryVO">
+		/* 배송상세페이지 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.deliveryDetail | 김수경  */
+		SELECT * FROM 
+			deliveryDetail
+		WHERE 
+			deliveryNumber = #{deliveryNumber}
+	</select>
+	<!-- 로더가 배송 상세페이지에서 픽업 지원을 하는 것 -->
+	<insert id="requestDelivery">
+		/* 픽업지원 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.requestDelivery | 김수경  */
+		INSERT INTO
+			DEL_CANDIDATE
+		(
+			RUSER_ID,
+		    DELIVERY_NUMBER,
+		    CANDIDATE_STATE,
+		    PICKUP_TIME,
+		    MESSAGE
+		)
+		VALUES
+		(
+			'test',
+		    #{deliveryNumber},
+		    2,
+		    #{pickupTime},
+		    #{message}
+		)
+	</insert>
+	
+	<!-- 로더가 배송 지원시 DELIVERY_MAN - state 1로 변경 -->
+	<update id="updateDeliveryState">
+		/* 배송지원상태업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.updateDeliveryState | 김수경  */
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 1
+		WHERE
+			DELIVERY_NUMBER = #{deliveryNumber};
+	</update>
+	
+	<!-- 로더가 배송 상세페이지에서 픽업 지원을 하는 것 - 히스토리에 저장 -->
+	<insert id="deliveryHistory">
+		/* 배송히스토리등록 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.deliveryHistory | 김수경  */
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER,
+		    DELIVERY_STATE,
+		    DEL_MESSAGE
+		)
+		VALUES
+		(
+			#{deliveryNumber},
+		    1,
+		    #{message}
+		)
+	</insert>
+	
+	<!-- 로더가 픽업확인 - 히스토리에 저장  -->
+	<insert id="pickupHistory">
+		/* 픽업지원 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.pickupHistory | 김수경  */
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER,
+		    DELIVERY_STATE,
+		    DEL_MESSAGE
+		)
+		VALUES
+		(
+			#{deliveryNumber},
+		    3,
+		    #{message}
+		)
+	</insert>
+	
+	<!-- DELIVERY_MAN 에 있는 DELIVERY_STATE 업데이트 -->
+	<update id="updatePickupDelState">
+		/* 픽업배송상태업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.updatePickupDelState | 김수경  */
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 3
+		WHERE
+			DELIVERY_NUMBER = #{deliveryNumber};
+	</update>
+	
+	<!-- 로더가 배송완료 - 히스토리에 저장  -->
+	<insert id="completeDelHistory">
+		/* 배송완료 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.completeDelHistory | 김수경  */
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER,
+		    DELIVERY_STATE,
+		    DEL_MESSAGE
+		)
+		VALUES
+		(
+			#{deliveryNumber},
+		    5,
+		    #{message}
+		)
+	</insert>
+
+	<!-- DELIVERY_MAN 에 있는 DELIVERY_STATE 업데이트 -->
+	<update id="updatecompleteDelState">
+		/* 배송완료상태업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.updatecompleteDelState | 김수경  */
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 5
+		WHERE
+			DELIVERY_NUMBER = #{deliveryNumber};
+	</update>
+	
+	<!-- 디테일 평가 -->
+	<insert id="reviewTotal">
+		/* 총 평가 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.reviewTotal | 김수경  */
+		INSERT INTO
+			SENDER_REVIEW_MAN
+		(
+			SUSER_NO,
+			DELIVERY_NUMBER	,
+			REVIEW_CONTENT,
+			REVIEW_REGISTOR	    
+		)
+		VALUES
+		(
+			#{suserNo},
+			#{deliveryNumber},
+			#{message},
+			'test'
+		)
+	</insert>
+	
+	<!-- 친절도 평가 -->
+	<insert id="reviewKindly">
+		/* 친절도 평가 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.reviewKindly | 김수경  */
+		INSERT INTO
+			SENDER_DETAIL_REVIEW_MAN
+		(
+			REVIEW_NUMBER,
+			REVIEW_CODE,
+			REVIEW_STAR		    
+		)
+		VALUES
+		(
+			(SELECT MAX(REVIEW_NUMBER) FROM SENDER_REVIEW_MAN SRM),
+			1,
+			#{kindly}
+		)
+	</insert>
+	
+	<!-- 약속 평가 -->
+	<insert id="reviewPromise">
+		/* 약속 평가 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.reviewPromise | 김수경  */
+		INSERT INTO
+			SENDER_DETAIL_REVIEW_MAN
+		(
+			REVIEW_NUMBER,
+			REVIEW_CODE,
+			REVIEW_STAR		    
+		)
+		VALUES
+		(
+			(SELECT COUNT(REVIEW_NUMBER) FROM SENDER_REVIEW_MAN SRM),
+			2,
+			#{promise}
+		)
+	</insert>
+	
+	
+	
+	<!-- 평가 후 최종완료 히스토리에 저장 -->
+	<insert id="reviewDelState">
+		/* 배송완료 히스토리업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.reviewDelState | 김수경  */
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER,
+		    DELIVERY_STATE
+		)
+		VALUES
+		(
+			#{deliveryNumber},
+		    7
+		)
+	</insert>
+	
+	<!-- DELIVERY_MAN 에 있는 DELIVERY_STATE 업데이트 -->
+	<update id="updateReviewDelState">
+		/* 리뷰완료 상태업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.updateReviewDelState | 김수경  */
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 7
+		WHERE
+			DELIVERY_NUMBER = #{deliveryNumber};
+	</update>
+	
+	<!-- SENDER_REVIEW_MAN 에 TOTAL_STAR 업데이트 -->
+	<update id="updateTotalReview">
+		/* 총 리뷰 합계 업데이트 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.updateTotalReview | 김수경  */
+		UPDATE 
+			SENDER_REVIEW_MAN
+		SET 
+			TOTAL_STAR = #{totalStar}
+		WHERE
+			DELIVERY_NUMBER = #{deliveryNumber};
+	</update>
+	
+	<!-- 배송 목록 출력 페이지 -->
+	<select id="deliveryList" resultType="com.misonamoo.smileway.domain.DeliveryListVO">
+	SELECT
+		DM.DELIVERY_NUMBER AS deliveryNumber,
+		DM.SUSER_NO AS suserNo,
+		DM.MAX_PICKUP_TIME AS maxPickupTime,
+		DM.MAX_ARRIVE_TIME AS maxArriveTime,
+		DM.DELIVERY_PRICE AS deliveryPrice,
+		DM.DELIVERY_STATE AS deliveryState,
+		DC.DEL_CONTENT_PICTURE AS delContentPicture,
+		DC.DEL_CONTENT_NAME AS delContentName,
+		SU.SUSER_ID AS suserId,
+		SU.SUSER_NAME AS suserName,
+		SU.SUSER_PHOTO AS suserPhoto,
+		SRM.TOTAL_STAR AS totalStar,
+		UG.GRADE_CODE AS gradeCode,
+		(SELECT
+			LOCATION_ADDRESS
+		 FROM
+		 	DEL_LOCATION_MAN DLM
+		 WHERE DLM.DELIVERY_NUMBER = DM.DELIVERY_NUMBER
+		 AND DLM.LOCATION_TYPE = 1) AS startPlace,
+		 (SELECT
+			LOCATION_ADDRESS
+		 FROM
+		 	DEL_LOCATION_MAN DLM
+		 WHERE DLM.DELIVERY_NUMBER = DM.DELIVERY_NUMBER
+		 AND DLM.LOCATION_TYPE = 2) AS arrivePlace,
+		(SELECT
+			COUNT(*)
+		 FROM
+		 	DELIVERY_MAN DM
+		 WHERE DELIVERY_STATE = 7) AS delicnt,
+		(SELECT
+			COUNT(*)
+		 FROM
+		 	DEL_CANDIDATE CAND
+		 WHERE
+			CAND.DELIVERY_NUMBER = DM.DELIVERY_NUMBER) AS candiNum,
+		(SELECT 
+			ROUND(AVG(REVIEW_STAR),1) 
+		 FROM SENDER_DETAIL_REVIEW_MAN SDRM
+		 WHERE
+		  SDRM.REVIEW_NUMBER = SRM.REVIEW_NUMBER AND SRM.SUSER_NO = DM.SUSER_NO) AS sendAvrPoint
+	FROM DELIVERY_MAN DM
+	INNER JOIN DEL_CONTENT_INFO DC
+	ON DM.DELIVERY_NUMBER = DC.DELIVERY_NUMBER
+	INNER JOIN SENDUSER SU
+	ON DM.SUSER_NO = SU.SUSER_NO
+	LEFT OUTER JOIN SENDER_REVIEW_MAN SRM
+	ON DM.SUSER_NO = SRM.SUSER_NO
+	LEFT OUTER JOIN USER_GRADE UG
+	ON UG.SUSER_NO = SU.SUSER_NO 
+	</select>
+	
+	<!--  -->
+	<select id="selectPoint" resultType="com.misonamoo.smileway.domain.DeliveryListVO">
+	SELECT
+		LOCATION_LATITUDE AS loLati,
+		LOCATION_LONGITUDE AS loLongi,
+		LOCATION_TYPE AS loType
+	FROM
+		DEL_LOCATION_MAN
+	WHERE
+		DELIVERY_NUMBER = #{deliveryNumber}
+	</select>
+	
+</mapper>
