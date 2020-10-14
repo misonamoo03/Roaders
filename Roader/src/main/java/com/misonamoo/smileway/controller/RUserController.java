@@ -234,7 +234,7 @@ public class RUserController {
 		logger.info(ruservo.getRuserEmail());
 		String codeBuf = "";
 		String cc = "";
-		String url = "http://localhost:8081/pwReset?secCode=";
+		String url = "http://localhost:8080/pwReset?secCode=";
 		ModelAndView mav;
 		RUserVO vo = RUserService.getPw(ruservo);
 		String pw = (String) vo.getRuserPw();

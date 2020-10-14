@@ -12,13 +12,13 @@
 <body>
     <header class="header">
         <h1>
-            <span class="font-color-orange">가는길에</span> @센더스
+            <span class="font-color-orange">가는길에</span> @로더스
         </h1>
     </header>
     <main class="main login-main">
         <section class="login">
             <h1>
-                가는길에 @ <span class="font-color-orange">센더스</span>
+                가는길에 @ <span class="font-color-orange">로더스</span>
             </h1>
             <form>
 	            <input type="text" id="ruserId" name="ruserId" size="40" placeholder="아이디 * (4~20)">

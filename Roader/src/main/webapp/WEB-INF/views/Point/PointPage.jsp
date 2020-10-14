@@ -5,9 +5,10 @@
 <head>
 <title>aa title here</title>
 </head>
+
 <body>
 <div id="root">
-
+	
 </div>
 <script src="/resources/point.js"></script>
 </body>

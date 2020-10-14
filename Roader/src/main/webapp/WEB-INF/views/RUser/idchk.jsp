@@ -17,7 +17,6 @@
                   	아이디 찾기<br>
 	<input type="text" name="ruserEmail" id="ruserEmail">이메일주소<br>
 	<input type="submit" formaction="idChk" formmethod="post" id="idChkBtn" value="아이디 찾기">                  	
-	${ID.ruserId}
                </ul>
             </nav>
          </c:if>

@@ -15,7 +15,7 @@
     <header class="main-header">
     <div>
         <h1>
-            <span class="font-color-orange">가는길에</span> @센더스
+            <span class="font-color-orange">가는길에</span> @로더스
         </h1>
         <form>
          <c:if test="${RUser == null }">
