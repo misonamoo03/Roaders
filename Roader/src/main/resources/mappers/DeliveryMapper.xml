@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 로더가 배송 상세페이지에서 픽업 지원을 하는 것 -->
 	<insert id="requestDelivery">
-		/* 픽업지원 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.requestDelivery | 김수경  */
+		/* 배송지원 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.requestDelivery | 김수경  */
 		INSERT INTO
 			DEL_CANDIDATE
 		(
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 		VALUES
 		(
-			'test',
+			#{ruserId},
 		    #{deliveryNumber},
 		    2,
 		    #{pickupTime},

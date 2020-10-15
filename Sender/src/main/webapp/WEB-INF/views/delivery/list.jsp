@@ -37,9 +37,8 @@
     <main class="main">
         <nav class="sub-menu">
             <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
+                <li><a href="/item/itemList">상품관리</a></li>
+                <li><a href="/delivery/list">배송관리</a></li>
             </ul>
         </nav>
         <section class="main-container">
@@ -49,7 +48,7 @@
                     <li><a href="">배송중 상품</a></li>
                     <li><a href="">배송완료 상품</a></li>
                     <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">

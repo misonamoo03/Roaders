@@ -38,19 +38,18 @@
     <main class="main">
         <nav class="sub-menu">
             <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
+                <li><a href="/item/itemList">상품관리</a></li>
+                <li><a href="/delivery/list">배송관리</a></li>
             </ul>
         </nav>
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="">전체배송</a></li>
+                    <li><a href="/delivery/list">전체배송</a></li>
                     <li><a href="">배송중 상품</a></li>
                     <li><a href="">배송완료 상품</a></li>
                     <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">
@@ -277,6 +276,9 @@
 	                        <tr>
 	                            <td class="title-col">배송상태</td>
 	                            <td>
+	                            	<c:if test="${d.DELIVERY_STATE eq 0}">
+	                               		배송요청이 등록된 상태입니다.
+	                              	</c:if>
 	                            	<c:if test="${d.DELIVERY_STATE eq 1}">
 	                               		픽업 요청 <input type="button" id="applyRoader" value="지원로더">
 	                              	</c:if>
@@ -314,15 +316,34 @@
 	            </section>
 	            
 	            <div class="btn-wrap">
-		            <a href="edit?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
-		            	<input type="button" value="픽업 요청 수정"> 
-		            </a>
-		            <a href="delete?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
-		            	<input type="button" value="픽업 요청 삭제"> 
-		            </a>
-		            <input type="hidden" value="${d.DELIVERY_NUMBER}" class="delivery-number-input">
-		            <input type="hidden" value="${r.ruserId }" class="ruser-id-input">
-		            <input type="hidden" value="${User.SUSER_ID}" class="suser-id-input">
+	            <c:choose>
+	            	<c:when test="${d.DELIVERY_STATE eq 0}">
+	            		<a href="edit?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
+			            	<input type="button" value="픽업 요청 수정"> 
+			            </a>
+			            <a href="delete?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
+			            	<input type="button" value="픽업 요청 삭제"> 
+			            </a>
+			            <input type="hidden" value="${d.DELIVERY_NUMBER}" class="delivery-number-input">
+			            <input type="hidden" value="${r.ruserId }" class="ruser-id-input">
+			            <input type="hidden" value="${User.SUSER_ID}" class="suser-id-input">
+		            </c:when>
+		            <c:when test="${d.DELIVERY_STATE eq 1}">
+	            		<a href="edit?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
+			            	<input type="button" value="픽업 요청 수정"> 
+			            </a>
+			            <a href="delete?DELIVERY_NUMBER=${d.DELIVERY_NUMBER}">
+			            	<input type="button" value="픽업 요청 삭제"> 
+			            </a>
+			            <input type="hidden" value="${d.DELIVERY_NUMBER}" class="delivery-number-input">
+			            <input type="hidden" value="${r.ruserId }" class="ruser-id-input">
+			            <input type="hidden" value="${User.SUSER_ID}" class="suser-id-input">
+		            </c:when>
+	            	<c:otherwise>
+	            		로더가 지정된 이후로는 픽업을 수정 및 삭제할 수 없습니다.
+	            	</c:otherwise>
+	            </c:choose>
+		            
 	            </div>
 	            
             </div>
