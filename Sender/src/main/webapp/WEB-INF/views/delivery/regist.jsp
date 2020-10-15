@@ -31,16 +31,18 @@
 				</nav>
 			</c:if>
 		</form>
-	</header>  
+	</header>
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
-            </ul>
-        </nav>
+    	<form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
+        
         <section class="main-container">
             <aside class="aside">
                 <ul>
