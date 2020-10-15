@@ -81,7 +81,13 @@ public class DeliveryController {
 		return deliveryService.selectPoint(dlvo);
 	}
 	
-
+	/*
+	 * 디테일 페이지로 이동하기 위한 페이지용 컨트롤러
+	 * deliveryNumber를 pathVariable 이용하여 url로 바로 사용
+	 * @param String deliveryNumber
+	 * @return
+	 * @throws Exception
+	 * */
 	@RequestMapping(value="/delivery/{deliveryNumber}", method = RequestMethod.GET)
 	public String Detail(@PathVariable("deliveryNumber") String deliveryNumber) throws Exception {
 		
@@ -89,6 +95,12 @@ public class DeliveryController {
 		return "/Delivery/detail";
 	}
 	
+	/*
+	 * vue에서 디테일 페이지로 axios 통신 하기 위한 컨트롤러
+	 * @param int deliveryNumber, DeliveryVO deliveryVO
+	 * @return DeliveryVO deliveryVO
+	 * @throws Exception
+	 * */
 	@ResponseBody
 	@RequestMapping(value="/delivery/detail", method = RequestMethod.POST)
 	public DeliveryVO deliveryDetail(int deliveryNumber, DeliveryVO deliveryVO) throws Exception {
@@ -99,8 +111,12 @@ public class DeliveryController {
 		return deliveryVO;
 	}
 	
-	
-	
+	/*
+	 * vue에서 배송지원 팝업 열어서 배송 지원하는 axios용 컨트롤러
+	 * @param DeliveryVO deliveryVO
+	 * @return 
+	 * @throws Exception
+	 * */
 	@RequestMapping(value="/delivery/requestDelivery", method = RequestMethod.POST)
 	public String requestDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -111,6 +127,12 @@ public class DeliveryController {
 		return "/delivery/requestDelivery";
 	}
 
+	/*
+	 * vue에서 픽업 팝업 열어서 픽업완료 전달하는 axios용 컨트롤러
+	 * @param DeliveryVO deliveryVO
+	 * @return 
+	 * @throws Exception
+	 * */
 	@RequestMapping(value="/delivery/registPickup", method = RequestMethod.POST)
 	public String registPickup(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -118,8 +140,14 @@ public class DeliveryController {
 		deliveryService.updatePickupDelState(deliveryVO);
 		
 		return "/delivery/registPickup";
-	}
+	}	
 	
+	/*
+	 * 픽업완료시 DELIVEY_MAN 상태 업데이트 / DEL_STATE_HISTORY에 추가
+	 * @param DeliveryVO deliveryVO
+	 * @return 
+	 * @throws Exception
+	 * */
 	@RequestMapping(value="/delivery/completeDelHistory", method = RequestMethod.POST)
 	public String complateDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -129,6 +157,13 @@ public class DeliveryController {
 		return "/delivery/completeDelHistory";
 	}
 
+	/*
+	 * 배송완료 후 리뷰 등록
+	 * 친절, 약속이 코드로 등록되고 totalStart는 두개 더한 값의 평균을 정수로 반환해서 넘김
+	 * @param DeliveryVO deliveryVO
+	 * @return 
+	 * @throws Exception
+	 * */
 	@RequestMapping(value="/delivery/reviewDelivery", method = RequestMethod.POST)
 	public String reviewDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -145,9 +180,6 @@ public class DeliveryController {
 		
 		return "/delivery/reviewDelivery";
 	}
-	
-	
-	
 	
 	
 }
