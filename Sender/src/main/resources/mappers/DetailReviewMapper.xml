@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.DetailReviewMapper">
+	<!-- ID값에 맞는 회원 정보 불러오기 -->
+	 <select id="deTailReviewRead" resultType="com.misonamoo.smileway.domain.DetailReviewVO">
+	 select 
+		 	REVIEW_NUMBER as reviewNumber, 
+			REVIEW_CODE as reviewCode,
+			REVIEW_STAR as reviewStar
+	 from 
+	   DETAIL_REVIEW_MAN 
+	 where REVIEW_NUMBER = #{reviewNumber}
+	 </select>
+</mapper>

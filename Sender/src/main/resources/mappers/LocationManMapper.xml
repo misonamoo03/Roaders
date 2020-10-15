@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.LocationManMapper">
+	<!-- 회원가입 -->
+	<insert id="insertLocation">
+		INSERT INTO LOCATION_MAN(
+			LOCATION_NUMBER,
+			LOCATION_NAME,
+			CHARHER,
+			LOCATION_CELLPHONE,
+			LOCATION_PHONE,
+			LOCATION_POST,
+			LOCATION_ADDRESS,
+			LOCATION_ADDRESS_DTL,
+			DEFAULT_LOCATION_CHK
+		)VALUE
+		(
+			get_seq('locationSeq'),
+			#{locationName},
+			#{charher},
+			#{locationCellphone},
+			#{locationPhone},
+			#{locationPost},
+			#{locationAddress1},
+			#{locationAddress2},
+			#{defaultLocationChk}
+		)
+	</insert>
+	<!-- ID값에 맞는 회원 정보 불러오기 -->
+	 <select id="selectLocation" resultType="com.misonamoo.smileway.domain.LocationVO">
+	 select 
+	  		LOCATION_NUMBER AS locationNumber,
+			LOCATION_NAME AS locationName,
+			CHARHER AS charher,
+			LOCATION_CELLPHONE AS locationCellphone,
+			LOCATION_PHONE AS locationPhone,
+			LOCATION_POST AS locationPost,
+			LOCATION_ADDRESS AS locationAddress1,
+			LOCATION_ADDRESS_DTL AS locationAddress2,
+			IFNULL(DEFAULT_LOCATION_CHK,'N') AS defaultLocationChk
+	 from 
+	   LOCATION_MAN 
+	 where LOCATION_NUMBER = #{locationNumber}
+	 </select>
+	  <!-- 전체 게시글 숫자 파악 -->
+	 <select id="countPaging" resultType="int">
+	 <![CDATA[
+	 SELECT
+	 	count(LOCATION_NUMBER)
+	 FROM
+	 	LOCATION_MAN
+	 WHERE
+	 	LOCATION_NUMBER>0
+	 ]]>
+	 </select>
+	 <!-- 각 페이지 번호에 알맞은 데이터 호출 -->
+	 <select id="listLocation" resultType="com.misonamoo.smileway.domain.LocationVO">
+	 <![CDATA[
+	 select 
+	  		LOCATION_NUMBER AS locationNumber,
+			LOCATION_NAME AS locationName,
+			CHARHER AS charher,
+			LOCATION_CELLPHONE AS locationCellphone,
+			LOCATION_PHONE AS locationPhone,
+			LOCATION_POST AS locationPost,
+			LOCATION_ADDRESS AS locationAddress1,
+			LOCATION_ADDRESS_DTL AS locationAddress2,
+			IFNULL(DEFAULT_LOCATION_CHK,'N') AS defaultLocationChk
+	 from LOCATION_MAN
+	 where 1=1
+	 order by LOCATION_NUMBER desc
+	 limit #{pageStart}, #{perPageNum}
+	 ]]>
+	 </select>
+	 
+	 
+		
+	<!-- 회원정보 수정 -->
+	 <update id="updateLocation">
+ 	UPDATE LOCATION_MAN SET 
+	   LOCATION_NAME = #{locationName}, 
+	   CHARHER = #{charher}, 
+	   LOCATION_CELLPHONE = #{locationCellphone}, 
+	   LOCATION_PHONE = #{locationPhone},
+	   LOCATION_POST = #{locationPost},
+	   LOCATION_ADDRESS = #{locationAddress1},
+	   LOCATION_ADDRESS_DTL = #{locationAddress2},
+	   DEFAULT_LOCATION_CHK = #{defaultLocationChk}
+ 	where LOCATION_NUMBER = #{locationNumber}
+ 	</update>
+
+	 <delete id="delete">
+	 	delete from LOCATION_MAN where LOCATION_NUMBER = #{locationNumber}
+	 </delete>
+</mapper>

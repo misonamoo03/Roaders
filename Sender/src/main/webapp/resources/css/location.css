@@ -1,0 +1,77 @@
+/*location - regist.jsp*/
+.reg-location {
+    margin-bottom: 30px;
+}
+    .reg-location>h1 {
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .reg-location table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    .reg-location td {
+        padding: 10px 0;
+        box-sizing: border-box;
+        min-height: 60px;
+        border-bottom: 1px solid #ddd;
+    }
+    .reg-location input, select {
+        padding: 3px;
+    }
+    .reg-location textarea {
+        width: 100%;
+        min-height: 100px;
+        resize: none;
+    }
+    .reg-location .add-row input {
+        margin-bottom: 10px;
+    }
+    .reg-location .add-row .address {
+        width: 500px;
+    }
+    .btn-wrap {
+        text-align: center;
+    }
+        .btn-wrap input[type="button"],
+         .btn-wrap input[type="submit"]{
+            width: 200px;
+            height: 40px;
+            border: 0;
+            background-color: orange;
+        }
+    
+/*location - list.jsp*/
+.location-btn-wrap {
+    display: flex;
+    justify-content: flex-end;
+
+    width: 1000px;
+}
+.location-btn-wrap input[type="button"] {
+    width: 200px;
+    height: 40px;
+    border: 0;
+    background-color: orange;
+}
+.location-list-table {
+	margin-top: 30px;
+    table-layout: fixed;
+    width: 1000px;
+    
+    border: 1px solid #ddd;
+}
+    .location-list-table th {
+        height: 40px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #f2f2f2;
+    }
+    .location-list-table td {
+        padding: 10px;
+        border-right: 1px solid #f2f2f2;
+    }
+    .location-list-table td:last-child {
+        text-align: center;
+    }

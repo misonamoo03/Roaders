@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.ItemMapper">
+
+<!-- 카테고리 등록  -->
+<insert id="insertCatagory">
+	INSERT
+	INTO CATAGORY_MAN
+		(SUSER_NO,CATAGORY_NAME)
+	VALUES
+		(1,#{CATAGORY_NAME})
+</insert>
+
+<!-- 카테고리 조회 -->
+<select id="catagoryList" resultType="com.misonamoo.smileway.domain.ItemVO">
+	<![CDATA[
+		SELECT
+			CATAGORY_NAME,
+			CATAGORY_ID
+		FROM
+			CATAGORY_MAN
+		WHERE SUSER_NO = 1
+		ORDER BY
+		CATAGORY_ID DESC
+	]]>
+</select>
+
+<!-- 상품 등록 -->
+<insert id="registItem">
+	INSERT INTO
+		ITEM_MAN
+		(
+			SUSER_NO,
+			CATAGORY_ID,
+			ITEM_NAME,
+			ITEM_TYPE,
+			ITEM_PRICE,
+			ITEM_WIDTH,
+			ITEM_LENGTH,
+			ITEM_HEIGHT,
+			ITEM_WEIGHT,
+			ITEM_PICTURE,
+			ITEM_EXPLAIN,
+			ITEM_WARN,
+			ITEM_PICTURE_Thum
+		)
+	VALUES
+		(
+			1,
+			#{CATAGORY_ID},
+			#{ITEM_NAME},
+			#{ITEM_TYPE},
+			#{ITEM_PRICE},
+			#{ITEM_WIDTH},
+			#{ITEM_LENGTH},
+			#{ITEM_HEIGHT},
+			#{ITEM_WEIGHT},
+			#{ITEM_PICTURE},
+			#{ITEM_EXPLAIN},
+			#{ITEM_WARN},
+			#{ITEM_PICTURE_Thum}
+		)
+</insert>
+
+
+<!-- 상품 조회(수정전) -->
+<!--  
+<select id="listItem" resultType="com.misonamoo.smileway.domain.ItemVO">
+	SELECT
+		I.ITEM_NO,
+		I.ITEM_PICTURE_Thum,
+		I.ITEM_NAME,
+		C.CATAGORY_NAME,
+		I.ITEM_USEAGE,
+		I.ITEM_PRICE,
+		I.ITEM_DEL_COUNT,
+		I.ITEM_REG_DATE
+	FROM
+		ITEM_MAN I , CATAGORY_MAN C 	
+	WHERE	
+		I.CATAGORY_ID = C.CATAGORY_ID
+	ORDER BY
+		ITEM_NO DESC
+	LIMIT #{pageStart} , #{perPageNum}
+</select>
+-->
+
+<!-- 상품조회(수정후) -->
+<select id="listItem" resultType="com.misonamoo.smileway.domain.ItemVO">
+	SELECT
+		I.ITEM_NO,
+		I.ITEM_PICTURE_Thum,
+		I.ITEM_NAME,
+		C.CATAGORY_NAME,
+		I.ITEM_USEAGE,
+		I.ITEM_PRICE,
+		I.ITEM_DEL_COUNT,
+		I.ITEM_REG_DATE
+	FROM
+		ITEM_MAN I , CATAGORY_MAN C 	
+	WHERE	
+		I.CATAGORY_ID = C.CATAGORY_ID
+		<if test="searchType != null">
+			<if test="searchType == '2'.toString()">
+				and I.ITEM_USEAGE = 2
+			</if>
+			<if test="searchType == '3'.toString()">
+				and I.ITEM_USEAGE = 3
+			</if>
+		</if>
+		<if test="keyword != null">
+			and I.ITEM_NAME like CONCAT('%',#{keyword},'%')
+		</if>
+	ORDER BY
+		ITEM_NO DESC
+	LIMIT #{pageStart} , #{perPageNum}
+</select>
+
+<!-- 상품 조회 중 전체 상품 갯수 확인하기 -->
+<select id="countItem" resultType="int">
+ 	<![CDATA[
+	 	SELECT 
+	   		COUNT(ITEM_NO) 
+	 	FROM 
+	   		ITEM_MAN 
+	 	WHERE 
+	   		ITEM_NO > 0 
+	 ]]>
+</select>
+
+<!-- 상품 목록 수정 조회하기 -->
+<select id="itemRead" resultType="com.misonamoo.smileway.domain.ItemVO">
+SELECT 
+	I.ITEM_NO,
+	I.ITEM_NAME, 
+	C.CATAGORY_NAME,
+	I.CATAGORY_ID, 
+	I.ITEM_TYPE, 
+	I.ITEM_PRICE, 
+	I.ITEM_WIDTH, 
+	I.ITEM_LENGTH, 
+	I.ITEM_HEIGHT, 
+	I.ITEM_WEIGHT,
+	I.ITEM_PICTURE, 
+	I.ITEM_EXPLAIN, 
+	I.ITEM_WARN, 
+	I.ITEM_PICTURE_Thum 
+FROM 
+	ITEM_MAN I, CATAGORY_MAN C
+WHERE 
+	ITEM_NO =#{ITEM_NO} AND I.CATAGORY_ID = C.CATAGORY_ID
+</select>
+
+<!-- 상품 팝업 목록 - 사용중인 상품만 출력 -->
+<select id="listItemPop" resultType="com.misonamoo.smileway.domain.ItemVO">
+
+	SELECT
+		I.ITEM_NO,
+		I.ITEM_PICTURE_Thum,
+		I.ITEM_NAME,
+		C.CATAGORY_NAME,
+		I.ITEM_USEAGE,
+		I.ITEM_PRICE,
+		I.ITEM_DEL_COUNT,
+		I.ITEM_REG_DATE
+	FROM
+		ITEM_MAN I , CATAGORY_MAN C 	
+	WHERE	
+		I.CATAGORY_ID = C.CATAGORY_ID 
+	AND
+		I.ITEM_USEAGE = 2
+
+</select>
+
+<!-- 상품 목록 수정하기 -->
+<update id="modifyItem">
+UPDATE
+	ITEM_MAN
+SET
+	CATAGORY_ID = #{CATAGORY_ID},
+	ITEM_NAME = #{ITEM_NAME},
+	ITEM_TYPE = #{ITEM_TYPE},
+	ITEM_PRICE = #{ITEM_PRICE},
+	ITEM_WIDTH = #{ITEM_WIDTH},
+	ITEM_LENGTH = #{ITEM_LENGTH},
+	ITEM_HEIGHT = #{ITEM_HEIGHT},
+	ITEM_WEIGHT = #{ITEM_WEIGHT},
+	ITEM_PICTURE = #{ITEM_PICTURE},
+	ITEM_EXPLAIN = #{ITEM_EXPLAIN},
+	ITEM_WARN = #{ITEM_WARN},
+	ITEM_PICTURE_Thum = #{ITEM_PICTURE_Thum}
+WHERE
+	ITEM_NO = #{ITEM_NO}
+</update>
+
+<!-- 상품 목록 삭제하기 -->
+
+<delete id="removeItemList">
+	DELETE
+		FROM ITEM_MAN
+	WHERE ITEM_NO = #{ITEM_NO}
+</delete>
+
+	
+</mapper>

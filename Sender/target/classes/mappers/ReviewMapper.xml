@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.ReviewMapper">
+	<!-- 라이더 회원ID값과 넘겨서 온 아이디값이 같은 회원 정보 불러오기 -->
+	<select id="reviewRead"	resultType="com.misonamoo.smileway.domain.ReviewVO">
+		SELECT 
+			RM.REVIEW_NUMBER AS reviewNumber,
+			RM.RUSER_ID AS ruserId,
+			RM.TOTAL_STAR AS totalStar,
+			S.SUSER_NAME AS suserName,
+			RM.REVIEW_REG_DATE AS reviewRegDate,
+			RM.REVIEW_CONTENT AS reviewContent,
+			IFNULL((
+				SELECT SUM(REVIEW_STAR) 
+				FROM DETAIL_REVIEW_MAN 
+				WHERE REVIEW_NUMBER = RM.REVIEW_NUMBER
+			),0) AS starSum,
+			IFNULL((
+				SELECT COUNT(REVIEW_STAR) 
+				FROM DETAIL_REVIEW_MAN 
+				WHERE REVIEW_NUMBER = RM.REVIEW_NUMBER
+			),0) AS starCount
+		FROM REVIEW_MAN RM INNER JOIN SENDUSER S
+			ON RM.REVIEW_REGISTOR = S.SUSER_ID
+		WHERE RM.RUSER_ID = #{ruserId}
+		ORDER BY RM.REVIEW_REG_DATE DESC
+		LIMIT #{pageStart} , #{perPageNum}
+	</select>
+	
+	
+	<!-- 상품 조회 중 전체 상품 갯수 확인하기 -->
+	<select id="countReview" resultType="int">
+ 	<![CDATA[
+	 	SELECT 
+	   		COUNT(REVIEW_NUMBER) 
+	 	FROM 
+	   		REVIEW_MAN 
+	 	WHERE 
+	   		REVIEW_NUMBER > 0 
+	 ]]>
+</select>
+<select id="ruserRead" resultType="com.misonamoo.smileway.domain.RUserVO">
+	SELECT 
+		R.RUSER_PHOTO AS ruserPhoto, 
+		R.RUSER_ID AS ruserId, 
+		R.RUSER_NAME AS ruserName,
+		R.RUSER_POINT AS ruserPoint,
+		SUM(RM.TOTAL_STAR) AS reviewTotalStar,
+		COUNT(RM.TOTAL_STAR) AS reviewCount,
+		(SELECT 
+			COUNT(DC.RUSER_ID) 
+		FROM 
+			DELIVERY_MAN DM INNER JOIN    DEL_CANDIDATE DC 
+			ON 
+			DM.DELIVERY_NUMBER = DC.DELIVERY_NUMBER
+		WHERE 
+			DM.DELIVERY_STATE = 7 AND DC.CANDIDATE_STATE = 1
+	   AND DC.RUSER_ID= R.RUSER_ID) AS ruserDeliveryCnt,
+		   IFNULL(RG.RGRADE_CODE,3) AS ruserGrade
+		FROM ROADUSER R INNER JOIN  REVIEW_MAN RM ON RM.RUSER_ID = R.RUSER_ID
+			LEFT OUTER JOIN  RUSER_GRADE RG ON R.RUSER_ID = RG.RUSER_ID
+		WHERE R.RUSER_ID = #{ruserId};
+</select>
+</mapper>

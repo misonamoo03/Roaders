@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.misonamoo.smileway.mapper.DeliveryMapper">
+
+	<insert id="registDelItem">
+		INSERT INTO
+		DEL_CONTENT_INFO
+		(
+			DEL_CONTENT_STATE,
+			DEL_CONTENT_NAME, 
+			DEL_CONTENT_TYPE, 
+			DEL_CONTENT_PRICE,
+			DEL_CONTENT_WIDTH,
+			DEL_CONTENT_LENGTH,
+			DEL_CONTENT_HEIGHT,
+			DEL_CONTENT_WEIGHT,
+			DEL_CONTENT_EXPLAIN,
+			DEL_CONTENT_WARN,
+			CATAGORY_ID,
+			DEL_CONTENT_PICTURE,
+			DEL_CONTENT_PICTURE_Thum
+		)
+		VALUES
+		(
+			#{DEL_CONTENT_STATE},
+			#{DEL_CONTENT_NAME}, 
+			#{DEL_CONTENT_TYPE},
+			#{DEL_CONTENT_PRICE},
+			#{DEL_CONTENT_WIDTH},
+			#{DEL_CONTENT_LENGTH},
+			#{DEL_CONTENT_HEIGHT},
+			#{DEL_CONTENT_WEIGHT},
+			#{DEL_CONTENT_EXPLAIN},
+			#{DEL_CONTENT_WARN},
+			#{CATAGORY_ID},
+			#{DEL_CONTENT_PICTURE},
+			#{DEL_CONTENT_PICTURE_Thum}
+		)
+	</insert>
+ 	
+	<insert id="registDelLocationDepart">
+		INSERT INTO
+		DEL_LOCATION_MAN
+		(
+			DELIVERY_NUMBER,
+			LOCATION_TYPE,
+			CHARHER, 
+			LOCATION_CELLPHONE, 
+			LOCATION_POST, 
+			LOCATION_ADDRESS,
+			LOCATION_ADDRESS_DTL,
+			LOCATION_LATITUDE,
+			LOCATION_LONGITUDE
+		)
+		VALUES
+		(
+			(SELECT MAX(DELIVERY_NUMBER) FROM DEL_LOCATION_MAN L)+1,
+			#{LOCATION_TYPE},
+			#{CHARHER}, 
+			#{LOCATION_CELLPHONE}, 
+			#{LOCATION_POST}, 
+			#{LOCATION_ADDRESS},
+			#{LOCATION_ADDRESS_DTL},
+			#{departureLatitudeX},
+			#{departureLongitudeY}
+		)
+	</insert>
+	
+	<insert id="registDelLocationArrival">
+		INSERT INTO
+		DEL_LOCATION_MAN
+		(
+			DELIVERY_NUMBER,
+			LOCATION_TYPE,
+			CHARHER, 
+			LOCATION_CELLPHONE, 
+			LOCATION_POST, 
+			LOCATION_ADDRESS,
+			LOCATION_ADDRESS_DTL,
+			LOCATION_LATITUDE,
+			LOCATION_LONGITUDE
+		)
+		VALUES
+		(
+			(SELECT MAX(DELIVERY_NUMBER) FROM DEL_LOCATION_MAN L),
+			#{LOCATION_TYPE_ARRIVAL},
+			#{CHARHER_ARRIVAL}, 
+			#{LOCATION_CELLPHONE_ARRIVAL}, 
+			#{LOCATION_POST_ARRIVAL}, 
+			#{LOCATION_ADDRESS_ARRIVAL},
+			#{LOCATION_ADDRESS_DTL_ARRIVAL},
+			#{arrivalLatitudeX},
+			#{arrivalLongitudeY}
+		)
+	</insert>
+	 
+	<insert id="registDelInfo">
+		INSERT INTO
+		DELIVERY_MAN
+		(
+			SUSER_NO,
+			DELIVERY_STATE, 
+			DELIVERY_PRICE, 
+			MIN_PICKUP_TIME,
+			MIN_ARRIVE_TIME,
+			FINISH_TIME,
+			MAX_PICKUP_TIME,
+			MAX_ARRIVE_TIME
+		)
+		VALUES
+		(
+			(SELECT SUSER_NO FROM SENDUSER WHERE SUSER_ID = #{SUSER_ID}),
+			1, 
+			#{DELIVERY_PRICE}, 
+			#{MIN_PICKUP_TIME},
+			#{MIN_ARRIVE_TIME},
+			#{FINISH_TIME},
+			#{MAX_PICKUP_TIME},
+			#{MAX_ARRIVE_TIME}
+		)
+	</insert>
+	
+	<insert id="registDelMethod">
+		INSERT INTO
+		DELIVERY_METHOD
+		(
+			DELIVERY_NUMBER,
+			DEL_METHOD_CODE
+		)
+		VALUES
+		(
+			(SELECT MAX(DELIVERY_NUMBER) FROM DELIVERY_METHOD M)+1,
+			#{DEL_METHOD_CODE}
+		)
+	</insert>
+
+	<select id="deliveryList" resultType="com.misonamoo.smileway.domain.DeliveryVO">
+			SELECT * FROM DEL_CONTENT_INFO I 
+			JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
+			JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
+		<if test="searchType != null">
+			<if test="searchType == 'Y'.toString()">
+				and I.DEL_CONTENT_STATE = '보내기'
+			</if>
+			<if test="searchType == 'N'.toString()">
+				and I.DEL_CONTENT_STATE = '가져오기'
+			</if>
+		</if>
+		<if test="keyword != null">
+			and I.DEL_CONTENT_NAME like CONCAT('%',#{keyword},'%')
+		</if>
+		ORDER BY I.DELIVERY_NUMBER DESC LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	
+	<!-- 상품 조회 중 전체 상품 갯수 확인하기 -->
+	<select id="countDelivery" resultType="int">
+	 	<![CDATA[
+	 		SELECT COUNT(I.DELIVERY_NUMBER) 
+	 		FROM DEL_CONTENT_INFO I 
+			JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
+			JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
+	        WHERE I.DELIVERY_NUMBER > 0;
+		 ]]>
+	</select>
+	
+	<select id="deliveryDetail" resultType="com.misonamoo.smileway.domain.DeliveryVO">			
+		SELECT * FROM 
+			DEL_CONTENT_INFO I 
+		JOIN CATAGORY_MAN C ON I.CATAGORY_ID = C.CATAGORY_ID
+		JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
+		JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
+		JOIN DELIVERY_METHOD M ON I.DELIVERY_NUMBER = M.DELIVERY_NUMBER
+		WHERE 
+			I.DELIVERY_NUMBER=#{DELIVERY_NUMBER};
+	</select>
+	
+	<select id="deliveryRoder" resultType="com.misonamoo.smileway.domain.RUserVO">			
+		SELECT RUSER_ID ruserId FROM 
+			DEL_CANDIDATE
+		WHERE 
+			DELIVERY_NUMBER=#{DELIVERY_NUMBER} 
+		AND 
+			CANDIDATE_STATE = 1;
+	</select>
+
+	<delete id="deleteDelItem">
+		DELETE FROM 
+		DEL_CONTENT_INFO
+		WHERE DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</delete>
+	
+	<delete id="deleteDelLocation">
+		DELETE FROM 
+		DEL_LOCATION_MAN
+		WHERE DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</delete>
+	
+	<delete id="deleteDelInfo">
+		DELETE FROM 
+		DELIVERY_MAN
+		WHERE DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</delete>
+	
+	<update id="updateDelItem">
+		UPDATE
+			DEL_CONTENT_INFO
+		SET
+			DEL_CONTENT_NAME = #{DEL_CONTENT_NAME},
+			DEL_CONTENT_TYPE = #{DEL_CONTENT_TYPE},
+			DEL_CONTENT_PRICE = #{DEL_CONTENT_PRICE},
+			DEL_CONTENT_WIDTH = #{DEL_CONTENT_WIDTH},
+			DEL_CONTENT_LENGTH = #{DEL_CONTENT_LENGTH},
+			DEL_CONTENT_HEIGHT = #{DEL_CONTENT_HEIGHT},
+			DEL_CONTENT_WEIGHT = #{DEL_CONTENT_WEIGHT},
+			DEL_CONTENT_PICTURE = #{DEL_CONTENT_PICTURE},
+			DEL_CONTENT_EXPLAIN = #{DEL_CONTENT_EXPLAIN},
+			DEL_CONTENT_WARN = #{DEL_CONTENT_WARN},
+			DEL_CONTENT_STATE = #{DEL_CONTENT_STATE},
+			CATAGORY_ID = #{CATAGORY_ID},
+			DEL_CONTENT_PICTURE_Thum = #{DEL_CONTENT_PICTURE_Thum}
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</update>
+	
+	<update id="updateDelLocationDepart">
+		UPDATE
+			DEL_LOCATION_MAN
+		SET
+			CHARHER = #{CHARHER},
+			LOCATION_CELLPHONE = #{LOCATION_CELLPHONE},
+			LOCATION_POST = #{LOCATION_POST},
+			LOCATION_ADDRESS = #{LOCATION_ADDRESS},
+			LOCATION_ADDRESS_DTL = #{LOCATION_ADDRESS_DTL},
+			LOCATION_LATITUDE = #{departureLatitudeX},
+			LOCATION_LONGITUDE = #{departureLongitudeY}
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</update>
+	
+	<update id="updateDelLocationArrival">
+		UPDATE
+			DEL_LOCATION_MAN
+		SET
+			CHARHER = #{CHARHER_ARRIVAL},
+			LOCATION_CELLPHONE = #{LOCATION_CELLPHONE_ARRIVAL},
+			LOCATION_POST = #{LOCATION_POST_ARRIVAL},
+			LOCATION_ADDRESS = #{LOCATION_ADDRESS_ARRIVAL},
+			LOCATION_ADDRESS_DTL = #{LOCATION_ADDRESS_DTL_ARRIVAL},
+			LOCATION_LATITUDE = #{arrivalLatitudeX},
+			LOCATION_LONGITUDE = #{arrivalLongitudeY}
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</update>
+	
+	<update id="updateDelInfo">
+		UPDATE
+			DELIVERY_MAN
+		SET
+			DELIVERY_PRICE = #{DELIVERY_PRICE},
+			MIN_PICKUP_TIME = #{MIN_PICKUP_TIME},
+			MIN_ARRIVE_TIME = #{MIN_ARRIVE_TIME},
+			FINISH_TIME = #{FINISH_TIME},
+		    MAX_PICKUP_TIME = #{MAX_PICKUP_TIME},
+			MAX_ARRIVE_TIME = #{MAX_ARRIVE_TIME}
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</update>
+	
+	<update id="updateDelMethod">
+		UPDATE
+			DELIVERY_METHOD
+		SET
+			DEL_METHOD_CODE = #{DEL_METHOD_CODE}
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+	</update>
+	 
+	<!-- 로더 지원 목록 팝업 -->
+	<select id="openApplyRoaderPop" resultType="com.misonamoo.smileway.domain.RUserVO">
+		SELECT 
+			R.RUSER_PHOTO AS ruserPhoto, 
+   			R.RUSER_ID AS ruserId, 
+   			R.RUSER_NAME AS ruserName,
+   			R.RUSER_POINT AS ruserPoint,
+   			(
+      			SELECT 
+      				COUNT(DC.RUSER_ID)
+      			FROM 
+      				DELIVERY_MAN DM 
+      			INNER JOIN 
+      				DEL_CANDIDATE DC 
+      			ON 
+      				DM.DELIVERY_NUMBER = DC.DELIVERY_NUMBER
+      			WHERE 
+      				DM.DELIVERY_STATE = 7 
+      			AND 
+      				DC.CANDIDATE_STATE = 1
+      			AND 
+      				DC.RUSER_ID= R.RUSER_ID
+   			) AS ruserDeliveryCnt,
+   			(
+      			SELECT 
+      				COUNT(RM.TOTAL_STAR) 
+				FROM 
+					REVIEW_MAN RM 
+				WHERE 
+					RM.RUSER_ID = R.RUSER_ID
+  			) AS reviewCount,
+   			(
+         		SELECT 
+         			SUM(RM.TOTAL_STAR)
+				FROM 
+					REVIEW_MAN RM 
+				WHERE 
+					RM.RUSER_ID = R.RUSER_ID
+  	 		)AS reviewTotalStar,
+  	 		IFNULL(RG.RGRADE_CODE,'3') AS ruserGrade,
+   			DC.PICKUP_TIME AS pickupTime,
+   			DC.MESSAGE AS message,
+            DC.DELIVERY_NUMBER as deliveryNumber
+   FROM 
+   		ROADUSER R 
+   INNER JOIN 
+   		DEL_CANDIDATE DC 
+   ON 
+   		R.RUSER_ID = DC.RUSER_ID
+   LEFT OUTER JOIN 
+   		RUSER_GRADE RG 
+   ON 
+   		R.RUSER_ID = RG.RUSER_ID
+   WHERE 
+   		DC.DELIVERY_NUMBER = #{deliveryNumber}
+	</select>
+
+<!-- 배송 히스토리 타임라인 팝업  -->
+	<select id="readSuser" resultType="com.misonamoo.smileway.domain.DeliveryVO">
+	SELECT /* 배송 히스토리 타임라인에서 회원정보를 가져오는 부분 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.delHistory | 한상희  */
+		S.SUSER_ID,
+		S.SPHONE,
+		S.SUSER_NAME,
+		S.SUSER_PHOTO,
+		UG.GRADE_CODE
+	FROM 
+		SENDUSER S
+	INNER JOIN 
+		DELIVERY_MAN DM
+	ON 
+		S.SUSER_NO = DM.SUSER_NO
+	INNER JOIN 
+		USER_GRADE UG
+	ON 
+		S.SUSER_NO = UG.SUSER_NO
+	WHERE 
+		DM.DELIVERY_NUMBER = #{DELIVERY_NUMBER};
+	</select>
+
+	<select id="delHistory" resultType="com.misonamoo.smileway.domain.DeliveryVO">
+		SELECT /* 배송 히스토리 타임라인 배송 상태별로 조회하기 | com.misonamoo.smileway.mappers.DeliveryServiceImpl.delHistory | 한상희  */
+			DH.DEL_CHANGE_TIME AS DEL_CHANGE_TIME,
+			DH.DELIVERY_STATE AS DELIVERY_STATE,
+			IFNULL(DH.DEL_PIC1,"없음") AS DEL_PIC1,
+			IFNULL(DH.DEL_PIC2,"없음") AS DEL_PIC2,
+			IFNULL(DH.DEL_PIC3,"없음") AS DEL_PIC3,
+			DH.DEL_MESSAGE AS DEL_MESSAGE
+		FROM 
+			DEL_STATE_HISTORY DH
+		INNER JOIN 
+			DELIVERY_MAN DM
+		ON 
+			DH.DELIVERY_NUMBER = DM.DELIVERY_NUMBER
+		WHERE DH.DELIVERY_NUMBER = #{DELIVERY_NUMBER}
+		ORDER BY DH.DELIVERY_STATE ASC
+	</select>
+	
+	<!-- 지원로더 대기에서 픽업상태로 변경 -->
+	<insert id="regRequestPickUp">
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER, 
+			DELIVERY_STATE, 
+			DEL_MESSAGE
+		)
+		VALUES 
+		(
+			#{DELIVERY_NUMBER}, 
+			2, 
+			#{DEL_MESSAGE}
+		);
+	</insert>
+	
+	<update id="updateDelRequestPickUp">
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 2
+		WHERE 
+			DELIVERY_NUMBER= #{DELIVERY_NUMBER}
+	</update>
+	
+	<update id="updateRoderRequestPickUp">
+		UPDATE 
+			DEL_CANDIDATE
+		SET 
+			CANDIDATE_STATE = 1
+		WHERE 
+			RUSER_ID = #{ruserId}
+		AND
+			DELIVERY_NUMBER= #{DELIVERY_NUMBER};
+	</update>
+	
+	<update id="regApprovePickUp">
+		INSERT INTO
+			DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER, 
+			DELIVERY_STATE, 
+			DEL_MESSAGE
+		)
+		VALUES 
+		(
+			#{DELIVERY_NUMBER}, 
+			4, 
+			#{DEL_MESSAGE}
+		);
+	</update>
+	
+	<update id="updateApprovePickUp">
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 4
+		WHERE
+			DELIVERY_NUMBER = #{DELIVERY_NUMBER};
+	</update>
+	
+	
+</mapper>
+
+
+
+	
