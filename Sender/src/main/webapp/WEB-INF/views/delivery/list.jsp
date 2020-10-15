@@ -27,7 +27,7 @@
 			</c:if>
 			<c:if test="${User != null }">
 				<nav>
-					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
+					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="/logout"
 						formmethod="get" id="logoutBtn" value="로그아웃">
 				</nav>
 			</c:if>

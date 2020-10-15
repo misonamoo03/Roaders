@@ -52,7 +52,7 @@ $(function(){
 
 	
 	 	$('#popupBtn').click(function(){
-	       window.open("/location/locationPopup", "팝업명", "width=550, height=500, left=600, top=100");
+	       window.open("/locationPopup", "팝업명", "width=550, height=500, left=600, top=100");
 	     });
 });
 </script>
@@ -75,7 +75,7 @@ $(function(){
          </c:if>	
 		<c:if test="${User != null }">
             <nav>
-          <a href="User/read?SUSER_ID=${User.SUSER_ID}">${User.SUSER_ID}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
+          <a href="/read?SUSER_ID=${User.SUSER_ID}">${User.SUSER_ID}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
             </nav>
       </div>
     <style>
@@ -121,7 +121,7 @@ $(function(){
 			<div class="sub-main">
 			<form>
 			
-			<button type="button" onclick="location.href='location/locationinsert'">장소등록</button>
+			<button type="button" onclick="location.href='/locationinsert'">장소등록</button>
 			<button type="button" name="popupBtn" id="popupBtn">팝업화면</button>
 				<table border="1" style="width: 800px;">
 			<tr>
@@ -155,15 +155,15 @@ $(function(){
 		</form>
 		<div style="display: flex; justify-content: center;">
 			<c:if test="${pageMaker.prev}">
-			<a href="/location/locationList${pageMaker.makeQuery(pageMaker.startPage - 1) }">&laquo;</a>
+			<a href="/locationList${pageMaker.makeQuery(pageMaker.startPage - 1) }">&laquo;</a>
 		</c:if>
 		<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }"
 			var="idx">
 			<c:out value="${pageMaker.cri.page == idx?'':''}" />
-			<a href="/location/locationList${pageMaker.makeQuery(idx)}">${idx}</a>
+			<a href="/locationList${pageMaker.makeQuery(idx)}">${idx}</a>
 		</c:forEach>
 		<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-			<a href="/location/locationList${pageMaker.makeQuery(pageMaker.endPage +1) }">
+			<a href="/locationList${pageMaker.makeQuery(pageMaker.endPage +1) }">
 				&raquo; </a>
 		</c:if>
 		</div>

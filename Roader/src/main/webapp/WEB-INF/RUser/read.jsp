@@ -38,17 +38,18 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 			$("#ruserName").focus();
 			return false
 		}
-	
+		
+		
 		if ($("#ruserEmail").val()=="" ) {
 	    	alert("이메일을 입력해주세요.");
 			$("#ruserEmail").focus();
 			return false
 		}
-		if ( !regExp2.test( $("#ruserEmail").val() ) ) {
-		      alert("잘못된 이메일입니다. 다시 기입해주세요.");
-		      $("#ruserEmail").val("");
-		      return false;
-		}
+		//if ( !regExp2.test( $("#ruserEmail").val() ) ) {
+		//      alert("잘못된 이메일입니다. 다시 기입해주세요.");
+		//      $("#ruserEmail").val("");
+		//      return false;
+		//}
 		if ($("#ruserPcode").val()=="" ) {
 			alert("우편번호를 입력해주세요.");
 			$("#ruserPcode").focus();
@@ -111,7 +112,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
     	}
     	.main-sub-menu>ul li:last-child {
     		margin-right: 0;
-    	}
+    	} 
     </style>
        	 <nav class="main-sub-menu">
             <ul>
@@ -141,9 +142,8 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 			<div class="sub-main">
 				아이디:	<input type="text" readonly="readonly" id="ruserId" name="ruserId" value="${RUserVO.ruserId}" size="40" > &nbsp;&nbsp;수정불가<br>
 				이름 :	<input type="text" name="ruserName" id="ruserName" value="${RUserVO.ruserName}" size="40" maxlength="10" ><br>
-				이메일 :	<input type="text" name="ruserEmail" id="ruserEmail" value="${RUserVO.ruserEmail1[0]}" size="40" ><br>
-				<input type="text" name="emailOne" placeholder="이메일아이디" maxlength="15"> @ 
-				<select	name="emailTwo">
+				이메일 :	<input type="text" name="emailOne" placeholder="이메일아이디" maxlength="15"> @ 
+				<select	name="emailTwo" id="emailTwo">
 					<option value="@gmail.com">gmail.com</option>
 					<option value="@naver.com">naver.com</option>
 					<option value="@daum.net">daum.net</option>

@@ -8,7 +8,15 @@
     <title>센더스</title>
     <link rel="stylesheet" href="/resources/css/reset.css">
     <link rel="stylesheet" href="/resources/css/style.css">
+    <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<script>
+$(()=>{
+	let main = $(".main");
+	let ruserId=main.find(".signup-button")
+	let signupBtn = main.find(".signup-button");
+});
+</script>
 <body>
     <header class="header">
         <h1>
@@ -34,9 +42,8 @@
 	                <a href="/pwSearch">비밀번호 찾기 |</a>
 	                <a href="/signup">회원가입</a>
 	            </span>
-	            <input type="submit" formaction="login" formmethod="post" id="loginBtn" value="로그인">
+	            <input type="submit" class="login-button" id="loginBtn" value="로그인">
 	 		</form>
-
         </section>
     </main>
 </body>

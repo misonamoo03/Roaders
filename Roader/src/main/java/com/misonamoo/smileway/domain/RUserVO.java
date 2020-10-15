@@ -48,7 +48,6 @@ public class RUserVO {
 		this.ruserEmail = ruserEmail;
 	}
 
-
 	public String[] getRuserEmail1() {
 		return ruserEmail1;
 	}
@@ -110,7 +109,10 @@ public class RUserVO {
 	}
 
 	public void setRuserPoint(String ruserPoint) {
-		this.ruserPoint = ruserPoint;
+		if(Integer.parseInt(ruserPoint)<= 0) {
+			this.ruserPoint = "0";
+		}else
+			this.ruserPoint = ruserPoint;
 	}
 
 	public String getRuserAgreEssen() {

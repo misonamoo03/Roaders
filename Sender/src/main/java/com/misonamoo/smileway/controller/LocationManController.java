@@ -27,12 +27,12 @@ public class LocationManController {
    private LocationService locationService;
    
    //장소입력화면
-   @RequestMapping(value="*/location/locationinsert", method = RequestMethod.GET)
+   @RequestMapping(value="/locationinsert", method = RequestMethod.GET)
    public String locationInsertPage() {
       return "location/locationInsert";
    }
    //입력처리
-   @RequestMapping(value="location/insertLocation", method = RequestMethod.POST)
+   @RequestMapping(value="/insertLocation", method = RequestMethod.POST)
    public String locationInsert(@ModelAttribute LocationVO vo) throws Exception {
       locationService.insertLocation(vo);
       return "location/locationList";
@@ -49,7 +49,7 @@ public class LocationManController {
       return "location/locationUpdate";
    }
    
-   @RequestMapping(value="location/updateLocation", method = RequestMethod.POST)
+   @RequestMapping(value="/updateLocation", method = RequestMethod.POST)
    public String locationUpdate(@ModelAttribute LocationVO vo, Model model) throws Exception {
       locationService.updateLocation(vo);
       LocationVO  resultLocation = new LocationVO(); 
@@ -58,7 +58,7 @@ public class LocationManController {
       return "redirect: /location/locationList";
    }
    //리스트(리드)
-   @RequestMapping(value="location/locationList", method = RequestMethod.GET)
+   @RequestMapping(value="/locationList", method = RequestMethod.GET)
    public String locationListPage(@ModelAttribute LocationVO vo, Model model) throws Exception {
       
       model.addAttribute("list", locationService.listLocation(vo));
@@ -71,7 +71,7 @@ public class LocationManController {
    }
    
    //삭제
-   @RequestMapping(value = "location/remove", method = {RequestMethod.GET ,RequestMethod.POST})
+   @RequestMapping(value = "/remove", method = {RequestMethod.GET ,RequestMethod.POST})
    public String removePOST(@RequestParam("locationNumber") int locationNumber, RedirectAttributes rttr) throws Exception {
       
       locationService.remove(locationNumber);
@@ -80,7 +80,7 @@ public class LocationManController {
    }
    
    //팝업 - 출발
-   @RequestMapping(value="/location/locationPopup", method = RequestMethod.GET)
+   @RequestMapping(value="/locationPopup", method = RequestMethod.GET)
    public String locationPopup(@ModelAttribute LocationVO vo, Model model) throws Exception {
       model.addAttribute("list", locationService.listLocation(vo));
       
@@ -88,7 +88,7 @@ public class LocationManController {
    }
    
  //팝업 - 도착
-   @RequestMapping(value="/location/locationArrivalPopup", method = RequestMethod.GET)
+   @RequestMapping(value="/locationArrivalPopup", method = RequestMethod.GET)
    public String locationArrivalPopup(@ModelAttribute LocationVO vo, Model model) throws Exception {
       model.addAttribute("list", locationService.listLocation(vo));
       
