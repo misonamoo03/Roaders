@@ -31,27 +31,7 @@
           <img src="C:\Users\User\Desktop\1.jpg">${User.SUSER_ID}</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
             </nav>
       </div>
-    <style>
-    	.main-sub-menu>ul {
-    		height: 50px;
-    		display: flex;
-    		justify-content: center;
-    		align-items: center;
-    	}
-    	.main-sub-menu>ul li {
-    		margin-right: 30px;
-    	}
-    	.main-sub-menu>ul li:last-child {
-    		margin-right: 0;
-    	}
-    </style>
-       	 <nav class="main-sub-menu">
-            <ul>
-                <li><a href="/item/itemList">상품관리</a></li>
-                <li><a href="/delivery/list">배송관리</a></li>
-                <li><a href="User/read?SUSER_ID=${User.SUSER_ID}">회원관리</a></li>
-            </ul>
-        </nav>
+      <%@include file="nav.jsp" %>
 		</c:if>
           <c:if test="${msg == false}">
         	 <p style="color: red;">로그인 실패! 아이디와 비밀번호 확인해주세요.</p>

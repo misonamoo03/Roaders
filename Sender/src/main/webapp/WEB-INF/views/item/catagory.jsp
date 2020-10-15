@@ -13,20 +13,6 @@
 </head>
 <body>
 
-	<script>
-	  function chkCatagory(){
-		  
-		  if($('#CATAGORY_NAME').val()==""){
-			  alert("카테고리명을 입력해주세요");
-			  $('#CATAGORY_NAME').focus();
-			  return false;
-		  }
-		  
-	  }
-	
-	
-	</script>
-	
 	
     <header class="header">
         <h1>
@@ -45,25 +31,15 @@
 				<nav>
 					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
 				</nav>
+				<%@include file="../nav.jsp" %>
 			</c:if>
 		</form>
     </header>    
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
-            </ul>
-        </nav>
         <section class="main-container">
             <aside class="aside">
-                <ul>
-                    <li><a href="/item/catagory">상품카테고리</a></li>
-					<li><a href="/item/itemList">상품목록</a></li>
-					<li><a href="/item/regist">상품등록</a></li>
-                </ul>
+                <%@ include file="itemSideBar.jsp" %>
             </aside>
                 <section class="reg-item">
                 	<div>
@@ -111,5 +87,20 @@
         </div>
         ⓒ Misonamoo Corp
     </footer>
+    
+	<script>
+	  function chkCatagory(){
+		  
+		  if($('#CATAGORY_NAME').val()==""){
+			  alert("카테고리명을 입력해주세요");
+			  $('#CATAGORY_NAME').focus();
+			  return false;
+		  }
+		  
+	  }
+	
+	
+	</script>
+	
 </body>
 </html>
