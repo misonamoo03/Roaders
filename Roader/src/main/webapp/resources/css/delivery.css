@@ -1,0 +1,152 @@
+.reg-delivery {
+    margin-bottom: 30px;
+}
+.reg-delivery>h1 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.reg-delivery table {
+    table-layout: fixed;
+    width: 100%;
+}
+.reg-delivery td {
+    padding: 10px 0;
+    box-sizing: border-box;
+    min-height: 60px;
+    border-bottom: 1px solid #ddd;
+}
+.reg-delivery input, select {
+    padding: 3px;
+}
+.reg-delivery textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: none;
+}
+.reg-delivery .add-row input {
+    margin-bottom: 10px;
+}
+.reg-delivery .add-row .address {
+    width: 500px;
+}
+
+.delivery-fee-box {
+	position: relative;
+	
+    margin: 50px 0;
+    padding: 30px;
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 400px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+.delivery-fee-box .fee-box-container {
+    display: flex;	
+	height: 270px;
+}
+.delivery-fee-box .fee-box {
+	width: 50%;
+	font-size: 20px;
+}
+.delivery-fee-box .fee-box>h1 {
+	margin-bottom: 20px;
+	font-size: 25px;
+	font-weight: 600;
+}
+.delivery-fee-box .fee-box li {
+	padding-bottom: 10px;
+}
+.delivery-fee-box .total-fee {
+	padding-top: 20px;
+	box-sizing: border-box;
+	font-size: 25px;
+	font-weight: bold;
+	border-top: 1px solid navy;
+}
+
+
+.delivery-fee-box .fee-box .popup-btn {
+	color: #fff;
+	border: 0;
+	border-radius: 50%;
+	background-color: orange;
+	cursor: pointer;
+}
+
+.popup {
+	position: absolute;
+	top: 100px; left: 300px;
+	
+	width: 300px;
+	
+	border: 1px solid #666;
+	background-color: #fff;
+	
+	display: none;
+}
+.popup h1 {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+	background-color: #666;	
+}
+.popup h1 .close {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	color: #666;
+	text-align: center;
+	line-height: 20px;
+	background-color: #fff;
+	cursor: pointer;
+}
+.popup table {
+	margin: 15px;
+	width: 270px;
+	border: 1px solid #ddd;
+}
+.popup table th, .popup table td {
+	width: 50%;
+	height: 40px;
+	text-align: center;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.popup table th {
+	color: #fff;
+	background-color: #2f3d7b;
+}
+.popup table td {
+	background-color: #f2f2f2;
+}
+
+.price, .extra-price, .extra-total {
+	display: inline-block;
+	width: 150px;
+	text-align: center;
+	border-bottom: 1px solid #000;
+}
+.item-section, .item-section-extra,
+.item-size, .item-size-extra,
+.item-weight, .item-weight-extra {	
+	display: inline-block;
+	width: 100px;
+	text-align: center;
+	border-bottom: 1px solid #000;	
+}
+.total-price {
+	width: 150px;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: right;
+	border: 0;
+	background-color: #f2f2f2;
+}
