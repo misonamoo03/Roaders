@@ -41,7 +41,7 @@ public class ItemController {
 	private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
 	
 	//상품 등록
-	@RequestMapping(value="/item/regist", method = RequestMethod.GET)
+	@RequestMapping(value="/regist", method = RequestMethod.GET)
 	public String regist(Model model) throws Exception {
 		
 		//카테고리 조회하기 위해서 쓰는것
@@ -52,7 +52,7 @@ public class ItemController {
 	}
 	
 	//상품 등록
-	@RequestMapping(value = "/item/regist", method = RequestMethod.POST)
+	@RequestMapping(value = "/regist", method = RequestMethod.POST)
 	public String registItem(ItemVO vo, @RequestParam("file") MultipartFile file)throws Exception {
 		
 		logger.info(uploadPath);
@@ -75,18 +75,20 @@ public class ItemController {
 	}
 	
 	//카테고리 조회
-	@RequestMapping(value="/item/catagory", method = RequestMethod.GET)
-	public void getcatagoryList(Model model)throws Exception {
+	@RequestMapping(value="/catagory", method = RequestMethod.GET)
+	public String getcatagoryList(Model model)throws Exception {
 		
 		logger.info("show catagory.............");
 		
 		List<ItemVO> list = itemService.catagoryList();
 		
 		model.addAttribute("list",list);
+		
+		return "/item/catagory";
 	}
 	
 	//카테고리 등록
-	@RequestMapping(value="/item/catagory", method = RequestMethod.POST)
+	@RequestMapping(value="/catagory", method = RequestMethod.POST)
 	public String insertCatagory(ItemVO item) throws Exception {
 		
 		itemService.registCatagory(item);
@@ -113,7 +115,7 @@ public class ItemController {
 	*/
 	
 	// 검색 기능 추가 상품 조회
-	@RequestMapping(value ="/item/itemList", method = RequestMethod.GET)
+	@RequestMapping(value ="/itemList", method = RequestMethod.GET)
 	public String listItem(Model model, @ModelAttribute("cri") SearchCriteria cri)throws Exception{
 		logger.info("itemlist.......");
 		logger.info(cri.toString());
