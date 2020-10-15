@@ -18,7 +18,7 @@
 </body>
 <script>
 function success(){
-	const regPwd = /^[a-zA-Z0-9]{4,12}$/;
+	const regPwd = /^[a-zA-Z0-9!@#$%^*+=-]{4,12}$/;
 	
 	if(f1.ruserPw.value == ""){
 		alert(" 수정할 비밀번호가 입력되지 않았습니다");

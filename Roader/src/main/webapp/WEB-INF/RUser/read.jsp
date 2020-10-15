@@ -137,12 +137,18 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 				</ul>
 			</aside>
 			<form>
-			<input type="hidden" name="ruserAgreOption" id="ruserAgreOption" value="${userVO.SUSER_AGRE_OPTION}">
+			<input type="hidden" name="ruserAgreOption" id="ruserAgreOption" value="${ruserVO.ruserAgreOption}">
 			<div class="sub-main">
-
 				아이디:	<input type="text" readonly="readonly" id="ruserId" name="ruserId" value="${RUserVO.ruserId}" size="40" > &nbsp;&nbsp;수정불가<br>
 				이름 :	<input type="text" name="ruserName" id="ruserName" value="${RUserVO.ruserName}" size="40" maxlength="10" ><br>
-				이메일 :	<input type="text" name="ruserEmail" id="ruserEmail" value="${RUserVO.ruserEmail}" size="40" ><br>
+				이메일 :	<input type="text" name="ruserEmail" id="ruserEmail" value="${RUserVO.ruserEmail1[0]}" size="40" ><br>
+				<input type="text" name="emailOne" placeholder="이메일아이디" maxlength="15"> @ 
+				<select	name="emailTwo">
+					<option value="@gmail.com">gmail.com</option>
+					<option value="@naver.com">naver.com</option>
+					<option value="@daum.net">daum.net</option>
+					<option value="@nate.com">nate.com</option>
+				</select>
 				우편번호 :	<input type="text" name="ruserPostCode" id="ruserPostCode" value="${RUserVO.ruserPostCode}" size="40" ><br>
 				주소1 :	<input type="text" name="ruserAddress1" id="ruserAddress1" value="${RUserVO.ruserAddress1}" size="40" ><br>
 				주소2 :	<input type="text" name="ruserAddress2" id="ruserAddress2" value="${RUserVO.ruserAddress2}" size="40" ><br>

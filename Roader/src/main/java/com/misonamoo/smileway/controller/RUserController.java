@@ -97,7 +97,15 @@ public class RUserController {
 	@RequestMapping(value = "/read", method = RequestMethod.GET) // GET 방식으로 페이지 호출
 	public String read(@RequestParam("ruserId") String ruserId, Model model) throws Exception {
 		// 인자값은 파라미터 값으로 기본키 ID를 기준으로 Model을 사용하여 불러옴
-		model.addAttribute(RUserService.read(ruserId)); // read 서비스 호출
+		RUserVO vo = new RUserVO();
+		vo = RUserService.read(ruserId);
+		String[] ruserEmailsplit = vo.getRuserEmail().toString().split("@");
+		vo.setRuserEmail1(ruserEmailsplit);
+		System.out.println(ruserEmailsplit[0]);
+		System.out.println(ruserEmailsplit[1]);
+		System.out.println("/////"+vo.getRuserEmail1()[0]);
+		System.out.println("/////"+vo.getRuserEmail1()[1]);
+		model.addAttribute(vo); // read 서비스 호출
 		return "RUser/read";
 	}
 

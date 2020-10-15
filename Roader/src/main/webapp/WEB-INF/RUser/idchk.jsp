@@ -13,7 +13,7 @@
          <c:if test="${idChk == null }">
             <nav>
                <ul>
-					가는길에 @ 센더스<br>
+					가는길에 @ 로더스<br>
                   	아이디 찾기<br>
 	<input type="text" name="ruserEmail" id="ruserEmail">이메일주소<br>
 	<input type="submit" formaction="idChk" formmethod="post" id="idChkBtn" value="아이디 찾기">                  	

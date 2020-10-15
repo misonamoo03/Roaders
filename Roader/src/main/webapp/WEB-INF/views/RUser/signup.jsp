@@ -82,9 +82,9 @@
 			<span class="font-color-red d-none id-duple-err"> &nbsp;&nbsp;중복된 아이디 입니다. </span> 
 			<span class="font-color-blue d-none id-confirm">
 				&nbsp;&nbsp;사용 가능한 아이디 입니다. </span> 
-			<input type="password" name="ruserPw" size="40" placeholder="비밀번호 * (영문 +숫자 8~20)" maxlength="10">
+			<input type="password" name="ruserPw" size="40" placeholder="비밀번호 * (영문 +숫자 8~20)" maxlength="15">
 			<span class="font-color-red d-none pwd-err">
-				 &nbsp;&nbsp;비밀번호는 4자리 이상 10자리 이하 영문과 숫자만 입력해주세요. 
+				 &nbsp;&nbsp;비밀번호는 4자리 이상 15자리 이하 영문과 숫자,특수문자만 입력해주세요. 
 			</span> 
 			<input type="password" name="pwd-check" size="40" placeholder="비밀번호 재확인" maxlength="10"> 
 			<span class="font-color-red d-none pwd-check-err">

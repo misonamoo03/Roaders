@@ -32,7 +32,7 @@ $(()=>{
     var emailDupleErr = main.find(".email-duple-err");
 
     var regId = RegExp(/^[a-zA-Z0-9]{4,12}$/);
-    var regPwd = RegExp(/^[a-zA-Z0-9]{4,12}$/);
+    var regPwd = RegExp(/^[a-zA-Z0-9!@#$%^*+=-]{4,12}$/);
     var regEmail = RegExp(/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/);
     var regNum = RegExp(/^[0-9]*$/);
     var regPhone = RegExp(/^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/);
@@ -61,7 +61,9 @@ $(()=>{
             	idErr.removeClass("d-none");
                 idConfirm.addClass("d-none");
                 idDupleErr.addClass("d-none");
+
             	idCheck=false;
+
                 return;
             } else {
             	idErr.addClass("d-none");
@@ -87,7 +89,7 @@ $(()=>{
     })
     
     ruserPw.keyup(()=>{
-    	if(!regPwd.test(ruserPw.val())){
+        if(!regPwd.test(ruserPw.val())){
             pwdErr.removeClass("d-none");            
             pwdCheck = false;
             return;
@@ -116,30 +118,6 @@ $(()=>{
     });
 
 
-    
-    // focusout(function() {
-	// 		if(rphone.val() === ""){
-				
-	// 			$(".rphone").val("");
-	// 		    pwdCheck = false;
-	// 			return false;
-	// 		}
-	// 		else if (!regExp.test($(".rphone").val())) {
-	// 			alert("잘못된 휴대폰 번호입니다. 숫자, - 를 뺀 숫자만 입력하세요.");
-	// 			return $(".rphone").val("");
-	// 		    pwdCheck = false;
-	// 		}
-	// 		else
-	// 		    pwdCheck = true;
-	// 		return ;
-	// 	});
-	// 	$(".ruserName").focusout(function() {
-	// 		if ($(".ruserName").val() === "") {
-	// 			alert("이름을 입력해주세요.");
-	// 			pwdCheck = false;
-	// 			return $(".ruserName").val("");
-	// 		}
-	// 	});
      signupBtn.click((e)=>{
     	
     	console.log(emailOne.val());
@@ -152,14 +130,8 @@ $(()=>{
 
 		console.log(rphone.val());
 		console.log("requireInput::::"+requireInput.val());
-       
-        if(!regId.test(ruserId.val())){
-            pwdCheck = false;
-             alert("잘못된 아이디입니다.");
-             e.preventDefault();
-            return;
-        }
-        else if(emailOne.val()=="") {
+        
+        if(emailOne.val()=="") {
             pwdCheck = false;
             alert("이메일아이디 입력하세요");
             emailOne.val() ="";
