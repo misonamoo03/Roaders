@@ -100,7 +100,7 @@ public class DeliveryController {
 	}
 	
 	
-	
+	@ResponseBody
 	@RequestMapping(value="/delivery/requestDelivery", method = RequestMethod.POST)
 	public String requestDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 

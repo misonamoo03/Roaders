@@ -35,13 +35,14 @@
 	</header>  
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li><a href="/itemList">상품관리</a></li>
-                <li><a href="/delivery/list">배송관리</a></li>
-                <li><a href="/read?SUSER_ID=${User.SUSER_ID}">회원관리</a></li>
-            </ul>
-        </nav>
+        <form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
         <section class="main-container">
             <aside class="aside">
                 <ul>
@@ -49,7 +50,7 @@
                     <li><a href="">배송중 상품</a></li>
                     <li><a href="">배송완료 상품</a></li>
                     <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">
@@ -87,7 +88,9 @@
 					
 				</ul>
             
-	            
+	            <a href="/delivery/regist">
+	            	<button type="button">배송등록</button>
+	            </a>
                 <table class="delivery-list-table">
                     <thead>
                         <tr>

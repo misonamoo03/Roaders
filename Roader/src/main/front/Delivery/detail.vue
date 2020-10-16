@@ -178,7 +178,7 @@
          </table>
       </section>
 
-      <span v-if="item.deliveryState == '0'">
+      <span v-if="item.deliveryState == '1'">
          <button @click="requestPop" type="button">배송지원</button>
       </span>
       <span v-if="item.deliveryState == '1'">
@@ -199,17 +199,16 @@
       <span v-else-if="item.deliveryState == '7'">완료</span>
       
       <div v-bind:style="popup" v-show="requestDelivery_show" style="z-index: 999;">
-         <form v-on:submit="requestDelivery">
+     
             
             <b>배송지원메세지</b> <br>
             <input type="text" v-model="message"><br>
             <input type="time" v-model="pickupTime"><br>
             
-            <input type="hidden" v-bind:value="item.deliveryNumber" name="delNumber"><br>
+            <input type="hidden" v-bind:value="item.deliveryNumber"><br>
 
-            <button>배송지원 </button>
+            <button type="button" @click="requestDelivery">배송지원 </button>
 
-         </form>
          <button @click="requestPop" type="button">닫기 </button>               
       </div>
 
@@ -302,6 +301,7 @@
             deliveryNumber: 'deliveryNumber',
             message: 'message',
             pickupTime: '',
+            ruserId: '',
 
             suserNo: '1',            
             kindly: '5',
@@ -389,6 +389,15 @@
                self.delMethodCode = res.data.delMethodCode;
                self.deliveryNumber = res.data.deliveryNumber;
             });
+            
+            axios({
+               method: 'get',
+               url: '/loginChk',
+               headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(res){
+               self.ruserId = res.data.ruserId;
+            });
          },
 
          requestPop: function(e){
@@ -396,11 +405,14 @@
             
             this.requestDelivery_show = !this.requestDelivery_show;
 
-            console.log(this.deliveryNumber)
+            console.log(this.deliveryNumber);
+            console.log(this.ruserId);
          },
 
          requestDelivery: function(e){
-            
+
+            e.preventDefault();
+
             axios({
                method: 'post',
                url: '/delivery/requestDelivery',
@@ -408,14 +420,16 @@
                data: {
                   deliveryNumber: this.deliveryNumber,
                   pickupTime: this.pickupTime,
-                  message: this.message     
+                  message: this.message,
+                  ruserId: this.ruserId
                }
             }).then(function(){
-               alert('지원완료')
-            })
+
+            });
          },
 
          registPickup: function(e){
+            
             e.preventDefault();
 
             this.registPickup_show = !this.registPickup_show;
@@ -432,7 +446,6 @@
          },
          
          completeDelHistory: function(e){
-            e.preventDefault();
 
             this.completeDelHistory_show = !this.completeDelHistory_show;
 

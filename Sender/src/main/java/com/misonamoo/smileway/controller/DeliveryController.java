@@ -92,7 +92,7 @@ public class DeliveryController {
 		return "redirect:/delivery/list";
 	}
 	
-	@RequestMapping(value="/delivery/list", method = RequestMethod.GET)
+	@RequestMapping(value="/deliveryList", method = RequestMethod.GET)
 	public String list(Model model, @ModelAttribute("cri") SearchCriteria cri) throws Exception {
 		
 		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
