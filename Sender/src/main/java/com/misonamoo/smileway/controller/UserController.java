@@ -133,14 +133,14 @@ public class UserController {
 		return "User/optionPopup";
 	}
 
-	@RequestMapping(value = "User/read", method = RequestMethod.GET) // GET 방식으로 페이지 호출
+	@RequestMapping(value = "/read", method = RequestMethod.GET) // GET 방식으로 페이지 호출
 	public String read(@RequestParam("SUSER_ID") String SUSER_ID, Model model) throws Exception {
 		// 인자값은 파라미터 값으로 기본키 ID를 기준으로 Model을 사용하여 불러옴
 		model.addAttribute(UserService.read(SUSER_ID)); // read 서비스 호출
 		return "User/read";
 	}
 
-	@RequestMapping(value = "User/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modify(UserVO uservo, RedirectAttributes rttr) throws Exception {
 		UserService.modify(uservo); // 회원정보수정 서비스 호출
 		return "redirect:/"; // 수정이 완료된 후, 홈목록페이지로 리턴

@@ -96,7 +96,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
          </c:if>	
 		<c:if test="${RUser != null }">
             <nav>
-          <a href="RUser/read?ruserId=${RUser.ruserId}">${RUser.ruserId}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
+          <a href="/read?ruserId=${RUser.ruserId}">${RUser.ruserId}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
             </nav>
       </div>
     <style>

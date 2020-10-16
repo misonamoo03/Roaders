@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{ruserPostCode},
 			#{ruserAgreEssen},
 			#{ruserAgreOption},
-			10000
+			0
 			)
 	</insert>
 	
@@ -134,10 +134,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getReviewHistory" resultType="com.misonamoo.smileway.domain.PointVO">
 		SELECT
 			POINT_TYPE AS pointType,
-			POINT_UPDATE AS pointUpdate,
+			date_format(POINT_UPDATE,'%Y-%m-%d_%H:%i') AS pointUpdate,
 			RUSER_ID AS ruserId,
 			REASON AS reason,
-			POINT_INS_TIME AS pointInsTime
+			POINT_INS_TIME AS pointInsTime,
+			RUSER_POINT AS ruserPoint
 		FROM
 			ROADPOINT
 		WHERE
