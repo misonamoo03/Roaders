@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<select id="deliveryList" resultType="com.misonamoo.smileway.domain.DeliveryVO">
-			SELECT * FROM DEL_CONTENT_INFO I 
+		SELECT * FROM DEL_CONTENT_INFO I 
 			JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
 			JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
 		<if test="searchType != null">
@@ -153,6 +153,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="keyword != null">
 			and I.DEL_CONTENT_NAME like CONCAT('%',#{keyword},'%')
 		</if>
+		INNER JOIN SENDUSER SE ON D.SUSER_NO = SE.SUSER_NO AND SE.SUSER_ID = #{suserId}
 		ORDER BY I.DELIVERY_NUMBER DESC LIMIT #{pageStart}, #{perPageNum}
 	</select>
 	
@@ -163,7 +164,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 		FROM DEL_CONTENT_INFO I 
 			JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
 			JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
-	        WHERE I.DELIVERY_NUMBER > 0;
+	        WHERE I.DELIVERY_NUMBER > 0
+	        AND D.SUSER_NO = (SELECT SU.SUSER_NO FROM SENDUSER SU WHERE SU.SUSER_ID = #{suserId})
 		 ]]>
 	</select>
 	
@@ -413,7 +415,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			DELIVERY_NUMBER= #{DELIVERY_NUMBER};
 	</update>
 	
-	<update id="regApprovePickUp">
+	<insert id="regApprovePickUp">
 		INSERT INTO
 			DEL_STATE_HISTORY
 		(
@@ -427,7 +429,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			4, 
 			#{DEL_MESSAGE}
 		);
-	</update>
+	</insert>
 	
 	<update id="updateApprovePickUp">
 		UPDATE 
@@ -456,6 +458,96 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    #{SUSER_ID}
 		)
 	</insert>
+	
+	<!--DETAIL_REVIEW_MAN 친절평점 등록-->
+	<insert id="registKindlyReview">
+		INSERT INTO
+			DETAIL_REVIEW_MAN
+		(
+			REVIEW_NUMBER,
+		    REVIEW_CODE,
+		    REVIEW_STAR
+		)
+		VALUES
+		(
+			(SELECT MAX(REVIEW_NUMBER) FROM REVIEW_MAN RM),
+		    1,
+		    #{kindly}
+		)
+	</insert>
+	
+	<!--DETAIL_REVIEW_MAN 약속평점 등록-->
+	<insert id="registPromiseReview">
+		INSERT INTO
+			DETAIL_REVIEW_MAN
+		(
+			REVIEW_NUMBER,
+		    REVIEW_CODE,
+		    REVIEW_STAR
+		)
+		VALUES
+		(
+			(SELECT MAX(REVIEW_NUMBER) FROM REVIEW_MAN RM),
+		    2,
+		    #{promise}
+		)
+	</insert>
+	
+	<!--DETAIL_REVIEW_MAN 속도평점 등록-->
+	<insert id="registSpeedReview">
+		INSERT INTO
+			DETAIL_REVIEW_MAN
+		(
+			REVIEW_NUMBER,
+		    REVIEW_CODE,
+		    REVIEW_STAR
+		)
+		VALUES
+		(
+			(SELECT MAX(REVIEW_NUMBER) FROM REVIEW_MAN RM),
+		    3,
+		    #{speed}
+		)
+	</insert>
+	
+	<!-- REVIEW_MAN - totalStart 업데이트 -->
+	<update id="updateTotalReview">
+		UPDATE 
+			REVIEW_MAN
+		SET 
+			TOTAL_STAR = #{totalStar}
+		WHERE 
+			DELIVERY_NUMBER= #{DELIVERY_NUMBER};
+	</update>
+	
+	<!--DEL_STATE_HISTORY 배송완료승인 히스토리 추가-->
+	<insert id="regConfirmDelHistory">
+		INSERT INTO
+			 DEL_STATE_HISTORY
+		(
+			DELIVERY_NUMBER,
+		    DELIVERY_STATE,
+		    DEL_MESSAGE,
+		    REVIEW_NUMBER
+		)
+		VALUES
+		(
+			#{DELIVERY_NUMBER},
+		    6,
+		    #{reviewContent},
+			(SELECT MAX(REVIEW_NUMBER) FROM REVIEW_MAN RM)
+		)
+	</insert>
+	
+	<!-- DELIVERY_MAN 배송상태 수정 -> 6으로 -->
+	<update id="updateConfirmDelHistory">
+		UPDATE 
+			DELIVERY_MAN
+		SET 
+			DELIVERY_STATE = 6
+		WHERE 
+			DELIVERY_NUMBER= #{DELIVERY_NUMBER};
+	</update>
 	
 </mapper>
 

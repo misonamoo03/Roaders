@@ -36,12 +36,14 @@
    </header>  
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li><a href="/item/itemList">상품관리</a></li>
-                <li><a href="/delivery/list">배송관리</a></li>
-            </ul>
-        </nav>
+        <form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
         <section class="main-container">
             <aside class="aside">
                 <ul>
