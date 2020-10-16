@@ -71,11 +71,8 @@ public interface DeliveryService {
 	//DELIVERY_MAN 배송상태 수정
 	public void updateApprovePickUp(DeliveryVO deliveryVO) throws Exception;
 
-
-
-	
-
 	//DETAIL_REVIEW_MAN 등록
-	//public void registTotalReview(ReviewVO reviewVO) throws Exception;
+	public void registTotalReview(DeliveryVO deliveryVO) throws Exception;
+
 
 }

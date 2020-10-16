@@ -164,8 +164,8 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 		session.update(namespace+".updateApprovePickUp",deliveryVO);
 	}
 	//DETAIL_REVIEW_MAN 등록
-//	@Override
-//	public void registTotalReview(ReviewVO reviewVO) throws Exception {
-//		session.insert(namespace+".registTotalReview", reviewVO);
-//	}
+	@Override
+	public void registTotalReview(DeliveryVO deliveryVO) {
+		session.insert(namespace+".registTotalReview", deliveryVO);
+	}
 }

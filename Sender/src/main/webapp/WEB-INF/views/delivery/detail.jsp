@@ -341,6 +341,9 @@
 		            </c:when>
 	            	<c:otherwise>
 	            		로더가 지정된 이후로는 픽업을 수정 및 삭제할 수 없습니다.
+			            <input type="hidden" value="${d.DELIVERY_NUMBER}" class="delivery-number-input">
+			            <input type="hidden" value="${r.ruserId }" class="ruser-id-input">
+			            <input type="hidden" value="${User.SUSER_ID}" class="suser-id-input">
 	            	</c:otherwise>
 	            </c:choose>
 		            

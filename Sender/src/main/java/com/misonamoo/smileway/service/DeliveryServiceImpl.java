@@ -164,11 +164,10 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliveryDao.updateApprovePickUp(deliveryVO);
 	}
 
-
 	//DETAIL_REVIEW_MAN 등록
-//	@Override
-//	public void registTotalReview(ReviewVO reviewVO) throws Exception {
-//		deliveryDao.registTotalReview(reviewVO);
-//	}
+	@Override
+	public void registTotalReview(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.registTotalReview(deliveryVO);
+	}
 
 }
