@@ -36,24 +36,27 @@
             </table>
             <div v-bind:style="buttonWrap">
                <span v-if="item.deliveryState == '0'">
-         <button @click="requestPop" type="button">배송지원</button>
-            </span>
-            <span v-if="item.deliveryState == '1'">
-               배송지원이 완료되었습니다.
-            </span>
-            <span v-else-if="item.deliveryState == '2'">
-               <button @click="registPickup" type="button">픽업하기</button>
-            </span>
-            <span v-else-if="item.deliveryState == '4'">
-               <button @click="completeDelHistory" type="button">배송완료</button>
-            </span> 
-            <span v-else-if="item.deliveryState == '5'">
-            샌더가 로더 평가 중.
-            </span>         
-            <span v-else-if="item.deliveryState == '6'">
-               <button @click="reviewPop" type="button">평가하기</button>
-            </span>
-            <span v-else-if="item.deliveryState == '7'">완료</span>
+                  <button @click="requestPop" type="button">배송지원</button>
+               </span>
+               <span v-if="item.deliveryState == '1'">
+                  배송지원이 완료되었습니다.
+               </span>
+               <span v-else-if="item.deliveryState == '2'">
+                  <button @click="pickupPop" type="button">픽업하기</button>
+               </span>
+               <span v-else-if="item.deliveryState == '3'">
+                  센더가 픽업 승인 중.
+               </span>
+               <span v-else-if="item.deliveryState == '4'">
+                  <button @click="completePop" type="button">배송완료</button>
+               </span> 
+               <span v-else-if="item.deliveryState == '5'">
+               샌더가 로더 평가 중.
+               </span>         
+               <span v-else-if="item.deliveryState == '6'">
+                  <button @click="reviewPop" type="button">평가하기</button>
+               </span>
+               <span v-else-if="item.deliveryState == '7'">완료</span>
             </div>
          </div>
       </section>
@@ -178,17 +181,20 @@
          </table>
       </section>
 
-      <span v-if="item.deliveryState == '1'">
+      <span v-if="item.deliveryState == '0'">
          <button @click="requestPop" type="button">배송지원</button>
       </span>
       <span v-if="item.deliveryState == '1'">
          배송지원이 완료되었습니다.
       </span>
       <span v-else-if="item.deliveryState == '2'">
-         <button @click="registPickup" type="button">픽업하기</button>
+         <button @click="pickupPop" type="button">픽업하기</button>
+      </span>
+      <span v-else-if="item.deliveryState == '3'">
+         센더가 픽업 승인 중.
       </span>
       <span v-else-if="item.deliveryState == '4'">
-         <button @click="completeDelHistory" type="button">배송완료</button>
+         <button @click="completePop" type="button">배송완료</button>
       </span> 
       <span v-else-if="item.deliveryState == '5'">
         샌더가 로더 평가 중.
@@ -213,71 +219,65 @@
       </div>
 
       <div v-bind:style="popup" v-show="registPickup_show" style="z-index: 999;">
-         <form v-on:submit="registPickup">
             
-            <b>픽업메세지</b><br>
-            <input type="text" v-model="message"><br>
-            
-            <input type="hidden" v-bind:value="item.deliveryNumber" name="delNumber"><br>
+         <b>픽업메세지</b><br>
+         <input type="text" v-model="message"><br>
+         
+         <input type="hidden" v-bind:value="item.deliveryNumber"><br>
 
-            <button @click="registPickup">픽업하기 </button>
+         <button type="button" @click="registPickup">픽업하기 </button>
 
-         </form>
-         <button @click="registPickup" type="button">닫기</button>            
+         <button @click="pickupPop" type="button">닫기</button>            
       </div>
 
       <div v-bind:style="popup" v-show="completeDelHistory_show" style="z-index: 999;">
-         <form v-on:submit="completeDelHistory">
             
             <b>배송완료메세지</b><br>
             <input type="text" v-model="message"><br>
             
-            <input type="hidden" v-bind:value="item.deliveryNumber" name="delNumber"><br>
+            <input type="hidden" v-bind:value="item.deliveryNumber"><br>
 
-            <button @click="completeDelHistory">배송완료  </button>
-
-         </form>
-         <button @click="completeDelHistory" type="button">닫기 </button>            
+            <button type="button" @click="completeDelHistory">배송완료  </button>
+         <button @click="completePop" type="button">닫기 </button>            
       </div>
 
       <div v-bind:style="popup" v-show="reviewDelivery_show" style="z-index: 999;">
-         <form v-on:submit="reviewDelivery">
-            
-            <b>평가하기</b><br>
 
-                        친절
-            <select v-model="kindly">
-               <option 
-                  v-for="kindlyOption in kindlyOptions" 
-                  v-bind:value="kindlyOption.value" 
-                  v-bind:key="kindlyOption.id">
-                  {{ kindlyOption.text }}
-               </option>
-            </select><br>
-            <input type="hidden" v-model="kindly">
+         
+         <b>평가하기</b><br>
 
-                        약속 
-            <select v-model="promise">
-               <option 
-                  v-for="promiseOption in promiseOptions" 
-                  v-bind:value="promiseOption.value" 
-                  v-bind:key="promiseOption.id">
-                  {{ promiseOption.text }}
-               </option>
-            </select><br>
-            <input type="hidden" v-model="promise"><br>
+                     친절
+         <select v-model="kindly">
+            <option 
+               v-for="kindlyOption in kindlyOptions" 
+               v-bind:value="kindlyOption.value" 
+               v-bind:key="kindlyOption.id">
+               {{ kindlyOption.text }}
+            </option>
+         </select><br>
+         <input type="hidden" v-model="kindly">
 
-            
-            <input type="text" v-model="message"><br>
+                     약속 
+         <select v-model="promise">
+            <option 
+               v-for="promiseOption in promiseOptions" 
+               v-bind:value="promiseOption.value" 
+               v-bind:key="promiseOption.id">
+               {{ promiseOption.text }}
+            </option>
+         </select><br>
+         <input type="hidden" v-model="promise"><br>
+
+         
+         <input type="text" v-model="message"><br>
 
 
-            <input type="hidden" v-bind:value="item.deliveryNumber" name="delNumber">
-            <input type="hidden" v-bind:value="item.suserNo" name="suserNo">
-            
+         <input type="hidden" v-bind:value="item.deliveryNumber" name="delNumber">
+         <input type="hidden" v-bind:value="item.suserNo" name="suserNo">
+         
 
-            <button @click="reviewPop">평가 </button>
+         <button type="button" @click="reviewDelivery">평가 </button>
 
-         </form>
          <button @click="reviewPop" type="button">닫기 </button>            
       </div>
    </div>
@@ -404,13 +404,10 @@
             e.preventDefault();
             
             this.requestDelivery_show = !this.requestDelivery_show;
-
-            console.log(this.deliveryNumber);
-            console.log(this.ruserId);
          },
 
          requestDelivery: function(e){
-
+            let self = this;     
             e.preventDefault();
 
             axios({
@@ -424,15 +421,20 @@
                   ruserId: this.ruserId
                }
             }).then(function(){
-
+               self.requestDelivery_show = !self.requestDelivery_show;
+               self.getPosts();
             });
          },
 
-         registPickup: function(e){
-            
+         pickupPop: function(e){
             e.preventDefault();
-
+            
             this.registPickup_show = !this.registPickup_show;
+         },
+
+         registPickup: function(e){
+            let self = this;     
+            e.preventDefault();
 
             axios({
                method: 'post',
@@ -442,12 +444,22 @@
                   deliveryNumber: this.deliveryNumber,
                   message: this.message
                }
-            })
+            }).then(function(){
+               self.registPickup_show = !self.registPickup_show;
+               self.getPosts();
+            });
+         },
+
+         completePop: function(e) {            
+            e.preventDefault();
+            
+            this.completeDelHistory_show = !this.completeDelHistory_show;
          },
          
-         completeDelHistory: function(e){
-
-            this.completeDelHistory_show = !this.completeDelHistory_show;
+         completeDelHistory: function(e){        
+            
+            let self = this;     
+            e.preventDefault();
 
             axios({
                method: 'post',
@@ -457,7 +469,10 @@
                   deliveryNumber: this.deliveryNumber,
                   message: this.message
                }
-            })
+            }).then(function(){
+               self.completeDelHistory_show = !self.completeDelHistory_show;
+               self.getPosts();
+            });
          },
 
          reviewPop: function(e){
@@ -467,6 +482,8 @@
          },
 
          reviewDelivery: function(e){
+            
+            let self = this;     
             e.preventDefault();
 
             axios({
@@ -481,7 +498,10 @@
                   message: this.message,
                   suserNo: this.suserNo
                }
-            })
+            }).then(function(){
+               self.reviewDelivery_show = !self.reviewDelivery_show;
+               self.getPosts();
+            });
 
          },
 

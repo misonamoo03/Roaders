@@ -74,7 +74,8 @@ public class DeliveryVO {
 	private String CATAGORY_NAME;
 	
 	//배송상태	
-	private String ruserId;	
+	private String ruserId;
+	private String reviewContent;
 	
 	//필요한 내용 추가(한상희)
 	private String SUSER_NAME,
@@ -684,6 +685,14 @@ public class DeliveryVO {
 		this.ruserId = ruserId;
 	}
 
+	public String getReviewContent() {
+		return reviewContent;
+	}
+
+	public void setReviewContent(String reviewContent) {
+		this.reviewContent = reviewContent;
+	}
+
 	@Override
 	public String toString() {
 		return "DeliveryVO [ITEM_NO=" + ITEM_NO + ", DELIVERY_NUMBER=" + DELIVERY_NUMBER + ", DEL_CONTENT_NAME="
@@ -715,10 +724,10 @@ public class DeliveryVO {
 				+ LOCATION_TYPE_ARRIVAL + ", departureLatitudeX=" + departureLatitudeX + ", departureLongitudeY="
 				+ departureLongitudeY + ", arrivalLatitudeX=" + arrivalLatitudeX + ", arrivalLongitudeY="
 				+ arrivalLongitudeY + ", DEL_METHOD_CODE=" + DEL_METHOD_CODE + ", CATAGORY_NAME=" + CATAGORY_NAME
-				+ ", ruserId=" + ruserId + ", SUSER_NAME=" + SUSER_NAME + ", SUSER_ID=" + SUSER_ID + ", SPHONE="
-				+ SPHONE + ", DEL_CHANGE_TIME=" + DEL_CHANGE_TIME + ", DEL_PIC1=" + DEL_PIC1 + ", DEL_PIC2=" + DEL_PIC2
-				+ ", DEL_PIC3=" + DEL_PIC3 + ", DEL_MESSAGE=" + DEL_MESSAGE + ", GRADE_CODE=" + GRADE_CODE
-				+ ", SUSER_PHOTO=" + SUSER_PHOTO + "]";
+				+ ", ruserId=" + ruserId + ", reviewContent=" + reviewContent + ", SUSER_NAME=" + SUSER_NAME
+				+ ", SUSER_ID=" + SUSER_ID + ", SPHONE=" + SPHONE + ", DEL_CHANGE_TIME=" + DEL_CHANGE_TIME
+				+ ", DEL_PIC1=" + DEL_PIC1 + ", DEL_PIC2=" + DEL_PIC2 + ", DEL_PIC3=" + DEL_PIC3 + ", DEL_MESSAGE="
+				+ DEL_MESSAGE + ", GRADE_CODE=" + GRADE_CODE + ", SUSER_PHOTO=" + SUSER_PHOTO + "]";
 	}
 	
 }

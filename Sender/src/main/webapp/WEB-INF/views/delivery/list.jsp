@@ -115,7 +115,7 @@
                                 	<img style="width: 120px;" src="${list.DEL_CONTENT_PICTURE_Thum}">
                                 </td>
                                 <td>
-                                	<a href="${list.DELIVERY_NUMBER}">
+                                	<a href="/delivery/${list.DELIVERY_NUMBER}">
                                 		${list.DEL_CONTENT_NAME}
                                 	</a>
                                 </td>

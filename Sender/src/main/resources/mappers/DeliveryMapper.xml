@@ -438,6 +438,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			DELIVERY_NUMBER = #{DELIVERY_NUMBER};
 	</update>
 	
+	<!-- 센더가 로더 평가 (REVIEW_MAN) -->
+	<insert id="registTotalReview">
+		INSERT INTO 
+			REVIEW_MAN
+		(
+			DELIVERY_NUMBER,
+		    RUSER_ID,
+		    REVIEW_CONTENT,
+		    REVIEW_REGISTOR
+		)
+		VALUES
+		(
+			#{DELIVERY_NUMBER},
+		    #{ruserId},
+		    #{reviewContent},
+		    #{SUSER_ID}
+		)
+	</insert>
 	
 </mapper>
 

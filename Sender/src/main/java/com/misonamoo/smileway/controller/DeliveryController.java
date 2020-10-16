@@ -267,17 +267,18 @@ public class DeliveryController {
 	
 	//구매 확정 및 평가 팝업
 	@RequestMapping(value = "/delivery/confirm", method = RequestMethod.GET)
-	public String openConfirmPurchasePop(ReviewVO reviewVO)throws Exception{
+	public String openConfirmPurchasePop()throws Exception{
 		
 		return "/delivery/ConfirmPurchasePop";
 	}
 	
 	//구매 확정 및 평가 팝업
 	@RequestMapping(value = "/delivery/confirm", method = RequestMethod.POST)
-	public String registPickupReview(ReviewVO reviewVO) throws Exception{
+	public String registPickupReview(DeliveryVO deliveryVO) throws Exception{
 		
+		System.out.println(deliveryVO.getDELIVERY_NUMBER());
 		//DETAIL_REVIEW_MAN 등록
-		//deliveryService.registTotalReview(reviewVO);
+		deliveryService.registTotalReview(deliveryVO);
 		
 		return "/delivery/ConfirmPurchasePop";
 	}

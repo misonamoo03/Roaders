@@ -111,6 +111,7 @@ public class DeliveryController {
 		return "/delivery/requestDelivery";
 	}
 
+	@ResponseBody
 	@RequestMapping(value="/delivery/registPickup", method = RequestMethod.POST)
 	public String registPickup(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -120,6 +121,7 @@ public class DeliveryController {
 		return "/delivery/registPickup";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/delivery/completeDelHistory", method = RequestMethod.POST)
 	public String complateDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
@@ -129,6 +131,7 @@ public class DeliveryController {
 		return "/delivery/completeDelHistory";
 	}
 
+	@ResponseBody
 	@RequestMapping(value="/delivery/reviewDelivery", method = RequestMethod.POST)
 	public String reviewDelivery(@RequestBody DeliveryVO deliveryVO) throws Exception {
 
