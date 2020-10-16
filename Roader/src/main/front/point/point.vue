@@ -8,7 +8,7 @@
       <li
         v-for="review in reviews"
         :key="review.index"
-      >{{review.pointUpdate}} {{review.reason}} {{review.ruserId}} {{review.pointType}}</li>
+      >{{review.pointUpdate}} {{review.reason}} {{review.ruserId}} {{review.pointType}}{{review.ruserPoint}}</li>
 
       <div v-show="plusShow">
         <h5>입금하기</h5>
@@ -45,9 +45,17 @@ export default {
       plusShow: false,
       minusShow: false,
       reviews: [],
-      reason:"",
-      pointType:"",
+      reason: "",
+      pointType: ""
     };
+  },
+  watch: {
+    getPosts: function(event) {
+      let self=this;
+      if (self.ruserPoint <= 0) {
+        self.ruserPoint = 0;
+      }
+    }
   },
   methods: {
     setPlusRuserPoint: function(point) {
@@ -56,6 +64,9 @@ export default {
     },
     setMinusRuserPoint: function(point) {
       this.ruserPoint -= point;
+      if (this.ruserPoint <= 0) {
+        this.ruserPoint = 0;
+      }
       return false;
     },
     plusP: function() {
@@ -67,7 +78,7 @@ export default {
         method: "post",
         data: {
           ruserId: self.ruserId,
-          ruserPoint: self.ruserPoint,
+          ruserPoint: self.ruserPoint
         }
       });
     },
@@ -80,36 +91,34 @@ export default {
         method: "post",
         data: {
           ruserId: self.ruserId,
-          ruserPoint: self.ruserPoint,
-          
+          ruserPoint: self.ruserPoint
         }
       });
-         axios({
+      axios({
         url: "/reviewUpdate",
         method: "post",
         data: {
           ruserId: self.ruserId,
-          reason: self.reason="출금",
-          pointType: self.pointType="출금",
+          reason: (self.reason = "출금"),
+          pointType: (self.pointType = "출금"),
           ruserPoint: self.ruserPoint
         }
       });
     },
     getPosts: async function(event) {
-      
       let self = this,
         response;
 
-
-        var params = location.search.substr(location.search.indexOf("?") + 1);
-        var sval = "";
-        params = params.split("&");
-        for (var i = 0; i < params.length; i++) {
-           let temp = params[i].split("=");
-            if ([temp[0]] == "ruserId") { sval = temp[1]; }
+      var params = location.search.substr(location.search.indexOf("?") + 1);
+      var sval = "";
+      params = params.split("&");
+      for (var i = 0; i < params.length; i++) {
+        let temp = params[i].split("=");
+        if ([temp[0]] == "ruserId") {
+          sval = temp[1];
         }
-      // self.ruserId = ruserId;
-      response = await axios.get("/pointRead?ruserId="+sval);
+      }
+      response = await axios.get("/pointRead?ruserId=" + sval);
       self.ruserPoint = response.data.ruserPoint;
       self.ruserId = response.data.ruserId;
       response = await axios({
@@ -126,6 +135,7 @@ export default {
   created: function() {
     let self = this;
     this.getPosts();
+    this.getW();
     console.log(self);
   }
 };

@@ -115,9 +115,9 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
     </style>
        	 <nav class="main-sub-menu">
             <ul>
-                <li>상품관리${userVO.SUSER_AGRE_OPTION}</li>
-                <li>배송관리${userVO.SUSER_AGRE_OPTION}</li>
-                <li>회원정보${userVO.SUSER_AGRE_OPTION}</li>
+                  <li><a href="/itemList">상품관리</a></li>
+                <li><a href="/delivery/list">배송관리</a></li>
+                <li><a href="/read?SUSER_ID=${User.SUSER_ID}">회원관리</a></li>
             </ul>
         </nav>
 		</c:if>
