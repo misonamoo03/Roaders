@@ -46,11 +46,14 @@
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="">전체배송</a></li>
-                    <li><a href="">배송중 상품</a></li>
-                    <li><a href="">배송완료 상품</a></li>
-                    <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/deliveryList">전체배송</a></li>
+                    <li class="delivery-ing delivery-menu">
+                    	배송중 상품</li>
+                    <li class="delivery-complete delivery-menu">
+                    	배송완료 상품
+                    </li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">
@@ -75,17 +78,14 @@
                         <h1>상품정보</h1>
                         <table class="del-item-table">
                             <tbody>
-                            <!-- 
+                            
                                 <tr>
                                     <td class="title-col">상품선택</td>
                                     <td>
-
-                                        <input type="checkbox"> 신규상품 선택
-
                                         <input type="button" id="itemList" value="상품목록">
                                     </td>
                                 </tr>
-                              -->
+                              
                                 <tr>
                                     <td class="title-col">상품명</td>
                                     <td>
@@ -115,7 +115,7 @@
                                 <tr>
                                     <td>상품가격</td>
                                     <td>
-                                        <input type="text" name="DEL_CONTENT_PRICE" class="require" required> 원
+                                        <input type="text" name="DEL_CONTENT_PRICE" class="item-price require" required> 원
                                     </td>
                                 </tr>
                                 <tr>
@@ -547,6 +547,7 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/resources/js/delivery/regist.js"></script>
     <script src="/resources/js/delivery/location.js"></script>
+    <script src="/resources/js/delivery/item.js"></script>
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9208a49e43122414ba9c09f6888a8f3e&libraries=services"></script>
     <script src="/resources/js/postcode.js"></script>
@@ -595,6 +596,20 @@
 					function(event) {
 						window.open("/delivery/itemList", "상품목록", "width=800, height=500, left=600, top=100");
 					});
+
+			$('.delivery-ing').on("click", function(event) {
+				location.href = "/deliveryList?"
+				+ 'page=1'
+				+ "&deliveryState=I"
+				+ "&keyword=";
+			});
+			
+			$('.delivery-complete').on("click", function(event) {
+				location.href = "/deliveryList?"
+				+ 'page=1'
+				+ "&deliveryState=C"
+				+ "&keyword=";
+			});
 		});
 	</script>
 </body>

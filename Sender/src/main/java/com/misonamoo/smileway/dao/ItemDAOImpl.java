@@ -107,8 +107,8 @@ public class ItemDAOImpl implements ItemDAO {
 
 	//상품 팝업 조회
 	@Override
-	public List<ItemVO> listItemPop() throws Exception {
-		return session.selectList(namespace+".listItemPop");
+	public List<ItemVO> listItemPop(SearchCriteria cri) throws Exception {
+		return session.selectList(namespace+".listItemPop",cri);
 	}
 
 }

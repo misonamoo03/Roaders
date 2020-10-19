@@ -46,6 +46,6 @@ public interface ItemService {
 	public void modifyItem(ItemVO item)throws Exception;
 
 	//상품 팝업 리스트
-	public List<ItemVO> listItemPop() throws Exception;
+	public List<ItemVO> listItemPop(SearchCriteria cri) throws Exception;
 
 }

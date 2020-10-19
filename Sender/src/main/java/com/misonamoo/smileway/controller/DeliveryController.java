@@ -94,17 +94,14 @@ public class DeliveryController {
 	}
 	
 	@RequestMapping(value="/deliveryList", method = RequestMethod.GET)
-	public String list(Model model, @ModelAttribute("cri") @RequestBody SearchCriteria cri,
+	public String list(Model model, @ModelAttribute("cri") SearchCriteria cri,
 			HttpServletRequest req, RedirectAttributes rttr) throws Exception {
 		
-		HttpSession session = req.getSession();
-		
+		HttpSession session = req.getSession();		
 		UserVO login = (UserVO)session.getAttribute("User");
 		
-		if(login != null && login.getSUSER_ID() != null ) {
-			
-			cri.setSuserId(login.getSUSER_ID());
-			
+		if(login != null && login.getSUSER_ID() != null ) {			
+			cri.setSuserId(login.getSUSER_ID());			
 		}
 		
 		ItemPageMaker pageMaker = new ItemPageMaker();
@@ -115,12 +112,7 @@ public class DeliveryController {
 		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
 		model.addAttribute("list",list);
 		
-		for(int i=0; i<list.size(); i++) {
-			DeliveryVO deliveryVO = list.get(i);
-			System.out.println(deliveryVO.getDELIVERY_NUMBER());
-		}
-		
-		return "/delivery/list";
+		return "/delivery/list"; 
 	}
 	
 	
@@ -202,14 +194,22 @@ public class DeliveryController {
 	
 	//상품 목록 팝업
 	@RequestMapping(value = "/delivery/itemList", method = RequestMethod.GET)
-	public String openItemListPop(Model model)throws Exception{
+	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, 
+			Model model, HttpServletRequest req, RedirectAttributes rttr)throws Exception{
+		
+		HttpSession session = req.getSession();		
+		UserVO login = (UserVO)session.getAttribute("User");
+		
+		if(login != null && login.getSUSER_ID() != null ) {	
+			cri.setSuserId(login.getSUSER_ID());			
+		}
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
 		catagoryList = itemService.catagoryList();
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
 		
-		List<ItemVO> list = itemService.listItemPop();
+		List<ItemVO> list = itemService.listItemPop(cri);
 		model.addAttribute("list",list);
 		
 		return "/delivery/ItemListPop";

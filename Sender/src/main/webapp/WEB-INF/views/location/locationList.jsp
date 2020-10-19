@@ -60,62 +60,48 @@ $(function(){
 
 <body>
 	 <header class="header">
-    <div>
-        <h1>
-            <span class="font-color-orange">가는길에</span> @센더스
-        </h1>
-        <form>
-         <c:if test="${User == null }">
-            <nav>
-               <ul>
-                  <li><a href="/loginform">로그인</a></li>
-                  <li><a href="/signup">회원가입</a></li>
-               </ul>
-            </nav>
-         </c:if>	
-		<c:if test="${User != null }">
-            <nav>
-          <a href="User/read?SUSER_ID=${User.SUSER_ID}">${User.SUSER_ID}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
-            </nav>
-      </div>
-    <style>
-    	.main-sub-menu>ul {
-    		height: 50px;
-    		display: flex;
-    		justify-content: center;
-    		align-items: center;
-    	}
-    	.main-sub-menu>ul li {
-    		margin-right: 30px;
-    	}
-    	.main-sub-menu>ul li:last-child {
-    		margin-right: 0;
-    	}
-    </style>
-       	 <nav class="main-sub-menu">
-            <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
-            </ul>
-        </nav>
-		</c:if>
-          <c:if test="${msg == false}">
-        	 <p style="color: red;">로그인 실패! 아이디와 비밀번호 확인해주세요.</p>
-		</c:if>
-      </form>
-      
-    </header>
+		<h1>
+			<span class="font-color-orange">가는길에</span> @센더스
+		</h1>
+		<form>
+			<c:if test="${User == null }">
+				<nav>
+					<ul>
+						<li><a href="/loginform">로그인</a></li>
+						<li><a href="/signup">회원가입</a></li>
+					</ul>
+				</nav>
+			</c:if>
+			<c:if test="${User != null }">
+				<nav>
+					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
+						formmethod="get" id="logoutBtn" value="로그아웃">
+					<input type="hidden" value="${User.SUSER_ID}" class="suser-id">
+				</nav>
+			</c:if>
+		</form>
+	</header>  
 
-	<main class="main">
+    <main class="main">
+        <form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
 		<section class="main-container">
 			<aside class="aside">
 				<ul>
-					<li><a href="">전체배송</a></li>
-					<li><a href="">배송중 상품</a></li>
-					<li><a href="">패송완료 상품</a></li>
-					<li><a href="">배송요청</a></li>
-					<li><a href="">장소 관리</a></li>
+					<li><a href="/deliveryList">전체배송</a></li>
+                    <li class="delivery-ing delivery-menu">
+                    	배송중 상품</li>
+                    <li class="delivery-complete delivery-menu">
+                    	배송완료 상품
+                    </li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
 				</ul>
 			</aside>
 			<div class="sub-main">
@@ -169,7 +155,7 @@ $(function(){
 		</div>
 			
 			</div>
-			
+		</section>	
 	</main>
 
 
@@ -200,6 +186,24 @@ $(function(){
 		ⓒ Misonamoo Corp
 	</footer>
 	<script>
+
+	$(document).ready(function() {
+		
+		$('.delivery-ing').on("click", function(event) {
+			location.href = "/deliveryList?"
+			+ 'page=1'
+			+ "&deliveryState=I"
+			+ "&keyword=";
+		});
+		
+		$('.delivery-complete').on("click", function(event) {
+			location.href = "/deliveryList?"
+			+ 'page=1'
+			+ "&deliveryState=C"
+			+ "&keyword=";
+		});
+		
+	});
 	
 	</script>
 	

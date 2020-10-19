@@ -150,10 +150,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and I.DEL_CONTENT_STATE = '가져오기'
 			</if>
 		</if>
-		<if test="keyword != null">
-			and I.DEL_CONTENT_NAME like CONCAT('%',#{keyword},'%')
-		</if>
 		INNER JOIN SENDUSER SE ON D.SUSER_NO = SE.SUSER_NO AND SE.SUSER_ID = #{suserId}
+		
+		<if test="deliveryState == 'C'.toString()">
+			WHERE D.DELIVERY_STATE = 7
+		</if>
+		<if test="deliveryState == 'I'.toString()">
+			WHERE D.DELIVERY_STATE != 7
+		</if>
+		
 		ORDER BY I.DELIVERY_NUMBER DESC LIMIT #{pageStart}, #{perPageNum}
 	</select>
 	
