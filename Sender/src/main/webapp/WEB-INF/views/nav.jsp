@@ -25,7 +25,7 @@
             <ul>
                 <li><a href="/itemList">상품관리</a></li>
 				<li><a href="/deliveryList">배송관리</a></li>
-                <li><a href="/read?SUSER_ID=${User.SUSER_ID}">회원관리</a></li>
+                <li><a href="/read?SUSER_ID=${cookie.id.value}">회원관리</a></li>
             </ul>
       </nav>
 </body>

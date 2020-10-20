@@ -18,7 +18,7 @@
 			<span class="font-color-orange">가는길에</span> @센더스
 		</h1>
 		<form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				<nav>
 					<ul>
 						<li><a href="/loginform">로그인</a></li>
@@ -26,22 +26,19 @@
 					</ul>
 				</nav>
 			</c:if>
-			<c:if test="${User != null }">
-				<nav>
-					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
-						formmethod="get" id="logoutBtn" value="로그아웃">
-					<input type="hidden" value="${User.SUSER_ID}" class="suser-id">
-				</nav>
+			<c:if test="${cookie.id != null }">
+				<img src="C:\Users\User\Desktop\1.jpg">${cookie.id.value}
+				 | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
 			</c:if>
 		</form>
 	</header>  
 
     <main class="main">
         <form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				
 			</c:if>
-			<c:if test="${User != null }">
+			<c:if test="${cookie.id != null }">
 				<%@include file="../nav.jsp" %>
 			</c:if>
 		</form>

@@ -39,6 +39,7 @@ $(()=>{
             } else if(itemType==4) {
                 $(opener.document).find('.item-section-select').val('화훼상품');
             }
+
         });         
     })
 })
