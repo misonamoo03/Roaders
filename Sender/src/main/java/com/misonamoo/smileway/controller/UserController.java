@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.misonamoo.smileway.domain.RUserVO;
@@ -40,24 +41,28 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public UserVO login(@RequestBody Map<String, Object> params, HttpServletRequest req, RedirectAttributes rttr,
+	public ModelAndView login(@ModelAttribute UserVO svo, HttpServletRequest req, RedirectAttributes rttr,
 			HttpServletResponse response) throws Exception {
 		UserVO vo = new UserVO();
-		vo.setSUSER_ID(params.get("SUSER_ID").toString());
-		vo.setSUSER_PW(params.get("SUSER_PW").toString());
+		vo.setSUSER_ID(svo.getSUSER_ID().toString());
+		vo.setSUSER_PW(svo.getSUSER_PW().toString());
 		// HttpSession session = req.getSession();
 		UserVO login = UserService.login(vo);
+		ModelAndView mav;
 		if (login == null) {
 			// session.setAttribute("User", null);
 			rttr.addFlashAttribute("msg", false);
+			mav = new ModelAndView("redirect:/");
+			return mav;
 		} else {
 			// session.setAttribute("User", login);
 			Cookie loginCookie = new Cookie("id", login.getSUSER_ID());
 			loginCookie.setPath("/");
 			loginCookie.setMaxAge(-1);
 			response.addCookie(loginCookie);
+			mav = new ModelAndView("redirect:/");
+			return mav;
 		}
-		return vo;
 	}
 
 	@RequestMapping(value = "*/logout", method = RequestMethod.GET)
