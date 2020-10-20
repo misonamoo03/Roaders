@@ -3,7 +3,9 @@ package com.misonamoo.smileway.controller;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.misonamoo.smileway.domain.RUserVO;
 import com.misonamoo.smileway.domain.UserVO;
 import com.misonamoo.smileway.service.UserService;
 
@@ -35,22 +39,30 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@ModelAttribute UserVO vo, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		logger.info("post login");
-		logger.info(vo.getSUSER_ID());
-		logger.info(vo.getSUSER_PW());
-		HttpSession session = req.getSession();
+	public ModelAndView login(@ModelAttribute UserVO svo, HttpServletRequest req, RedirectAttributes rttr,
+			HttpServletResponse response) throws Exception {
+		UserVO vo = new UserVO();
+		vo.setSUSER_ID(svo.getSUSER_ID().toString());
+		vo.setSUSER_PW(svo.getSUSER_PW().toString());
+		// HttpSession session = req.getSession();
 		UserVO login = UserService.login(vo);
-
+		ModelAndView mav;
 		if (login == null) {
-			session.setAttribute("User", null);
+			// session.setAttribute("User", null);
 			rttr.addFlashAttribute("msg", false);
+			mav = new ModelAndView("redirect:/");
+			return mav;
 		} else {
-			session.setAttribute("User", login);
+			// session.setAttribute("User", login);
+			Cookie loginCookie = new Cookie("id", login.getSUSER_ID());
+			loginCookie.setPath("/");
+			loginCookie.setMaxAge(-1);
+			response.addCookie(loginCookie);
+			mav = new ModelAndView("redirect:/");
+			return mav;
 		}
-
-		return "redirect:/";
 	}
 
 	@RequestMapping(value = "*/logout", method = RequestMethod.GET)
@@ -58,14 +70,19 @@ public class UserController {
 		session.invalidate();
 		return "redirect:/";
 	}
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout2(HttpSession session) throws Exception {
-		session.invalidate();
-		return "redirect:/";
-	}
-	@RequestMapping(value = "User/logout", method = RequestMethod.GET)
-	public String logouttwo(HttpSession session) throws Exception {
-		session.invalidate();
+	public String logout2(HttpServletResponse response, HttpServletRequest request,
+			HttpSession session/*@CookieValue(value="id",required=false)Cookie genderCookie */) throws Exception {
+		System.out.println("로그아웃중@!!@!@!@");
+		// session.invalidate();
+		Cookie[] cookies = request.getCookies(); // 모든 쿠키의 정보를 cookies에 저장
+		if (cookies != null) { // 쿠키가 한개라도 있으면 실행
+			for (int i = 0; i < cookies.length; i++) {
+				cookies[i].setMaxAge(0); // 유효시간을 0으로 설정
+				response.addCookie(cookies[i]); // 응답 헤더에 추가
+			}
+		}
 		return "redirect:/";
 	}
 

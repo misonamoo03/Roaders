@@ -50,19 +50,22 @@ export default {
       pointType: ""
     };
   },
-  computed: {
-       zeroPoint: function () {
-        if(this.ruserPoint < 0){
-            this.ruserPoint = 0;
-        }
-        return this.ruserPoint;
-      }
-  },
+  // computed: {
+  //      zeroPoint: function () {
+  //       if(this.ruserPoint < 0){
+  //           this.ruserPoint = 0;
+  //       }
+  //       return this.ruserPoint;
+  //     }
+  // },
   methods: {
+    //입금 시킬 돈을 모으는 함수
     setPlusRuserPoint: function(point) {
       this.varPoint += point;
       return false;
     },
+
+    //출금 시킬 돈을 모으는 함수 단 ruserPoint의 돈보다 많은 돈을 출금할 경우 제한
     setMinusRuserPoint: function(point) {  
       this.varPoint += point;
       if(this.ruserPoint-this.varPoint<0){
@@ -71,12 +74,14 @@ export default {
       }
       return false;
     },
+    //입금버튼을 눌렀을 때 뜨는 팝업
     plusPS: function() {
       let self = this;
       this.plusShow = !this.plusShow; // #2, #3
       this.minusShow = false; // #2, #3
       this.varPoint = 0;
     },
+    //입금시킬 돈을 입력 후 확인을 눌렀을 떄 그 돈을 DB에 보내주고 리스트를 다시 불러오는 함수
     plusP: async function() {
       let self = this;
       let response;
@@ -110,12 +115,14 @@ export default {
       self.reviews = response.data;
       this.varPoint=0;
     },
+    //출금버튼을 눌렀을 때 뜨는 팝업
     minusPS: function(){
       let self = this;
       this.minusShow = !this.minusShow; // #2, #3
       this.plusShow = false;
       this.varPoint = 0;
      },
+    //출금시킬 돈을 입력 후 확인을 눌렀을 떄 그 돈을 DB에 보내주고 리스트를 다시 불러오는 함수
     minusP: async function() {
       let self = this;
       let response;
@@ -129,6 +136,8 @@ export default {
           ruserPoint: self.ruserPoint
         }
       });
+      //ruserPoint의 값이 0일경우 확인을 눌렀을 때 0을 로그에 안찍게 하기 위한 조건
+      if(!this.ruserPoint==0){
       response = await axios({
         url: "/reviewUpdate",
         method: "post",
@@ -147,6 +156,7 @@ export default {
         }
       });
       self.reviews = response.data;
+      }
       this.varPoint=0;
     },
     getPosts: async function(event) {
@@ -175,11 +185,10 @@ export default {
       self.reviews = response.data;
     }
   },
-
+  //시작하자마자 실
   created: function() {
     let self = this;
     this.getPosts();
-    console.log(self);
   }
 };
 </script>

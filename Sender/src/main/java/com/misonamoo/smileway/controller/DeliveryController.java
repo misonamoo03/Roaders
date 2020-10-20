@@ -33,7 +33,6 @@ import com.misonamoo.smileway.domain.ReviewVO;
 import com.misonamoo.smileway.domain.SearchCriteria;
 import com.misonamoo.smileway.service.DeliveryService;
 import com.misonamoo.smileway.service.ItemService;
-import com.misonamoo.smileway.utils.CommonUtil;
 import com.misonamoo.smileway.utils.UploadFileUtils;
 
 import net.sf.json.JSONArray;
@@ -198,29 +197,20 @@ public class DeliveryController {
 	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, 
 			Model model, HttpServletRequest req, RedirectAttributes rttr)throws Exception{
 		
-		/*
-		 * HttpSession session = req.getSession(); UserVO login =
-		 * (UserVO)session.getAttribute("User");
-		 * 
-		 * if(login != null && login.getSUSER_ID() != null ) {
-		 * cri.setSuserId(login.getSUSER_ID()); }
-		 */
+		HttpSession session = req.getSession();		
+		UserVO login = (UserVO)session.getAttribute("User");
 		
-		UserVO userInfo = CommonUtil.cookieUserInfo(req);
-		if(userInfo!=null) {
-			cri.setSuserId(userInfo.getSUSER_ID());
-			
-			model.addAttribute("suserId",userInfo.getSUSER_ID());
-			//카테고리 조회하기 위해서 쓰는것
-			List<ItemVO> catagoryList = null;
-			catagoryList = itemService.catagoryList();
-			model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
-			
-			List<ItemVO> list = itemService.listItemPop(cri);
-			model.addAttribute("list",list);
-		}else {
-			model.addAttribute("suserId","");
+		if(login != null && login.getSUSER_ID() != null ) {	
+			cri.setSuserId(login.getSUSER_ID());			
 		}
+		
+		//카테고리 조회하기 위해서 쓰는것
+		List<ItemVO> catagoryList = null;
+		catagoryList = itemService.catagoryList();
+		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
+		
+		List<ItemVO> list = itemService.listItemPop(cri);
+		model.addAttribute("list",list);
 		
 		return "/delivery/ItemListPop";
 	}

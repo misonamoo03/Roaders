@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,42 +40,43 @@ public class RUserController {
 	private RUserService RUserService;
 
 	// 로그인 처리 ID값을 불러와 있을경우 RUser세션에 담는다.
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@ModelAttribute RUserVO vo, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		logger.info(vo.getRuserId());
-		logger.info(vo.getRuserPw());
-		HttpSession session = req.getSession();
+	public RUserVO login(@RequestBody Map<String, Object> params, HttpServletRequest req, RedirectAttributes rttr,HttpServletResponse response) throws Exception {
+		RUserVO vo = new RUserVO();
+		vo.setRuserId(params.get("ruserId").toString());
+		vo.setRuserPw(params.get("ruserPw").toString());
+		//HttpSession session = req.getSession();
 		RUserVO login = RUserService.login(vo);
-
-		logger.info("받은값");
-
 		if (login == null) {
-			session.setAttribute("RUser", null);
-			rttr.addFlashAttribute("msg", false);
+			//session.setAttribute("RUser", null);
+			//rttr.addFlashAttribute("msg", false);
 		} else {
-			session.setAttribute("RUser", login);
-			logger.info(login.getRuserId());
-			logger.info(login.getRuserPw());
+			System.out.println(login.getRuserId());
+			//session.setAttribute("RUser", login);
+			Cookie loginCookie = new Cookie("id",login.getRuserId());
+			loginCookie.setPath("/");
+			loginCookie.setMaxAge(-1);
+			response.addCookie(loginCookie);
 		}
-		
-		return "redirect:/";
+		return vo;
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/loginChk", method = RequestMethod.GET)
-	public Map loginChk(HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		Map<String,String> result = new HashMap<String, String>();
-		HttpSession session = req.getSession();
-		String ruserId = "";
-		String loginYN = "N";
-		if(session != null && session.getAttribute("RUser")!=null ) {
-			ruserId = ((RUserVO)session.getAttribute("RUser")).getRuserId();
-			loginYN = "Y";
-		}
-		result.put("ruserId", ruserId);
-		result.put("loginYN", loginYN);
-		return result;
-	}
+//	@ResponseBody
+//	@RequestMapping(value = "/loginChk", method = RequestMethod.GET)
+//	public Map loginChk(HttpServletRequest req, RedirectAttributes rttr) throws Exception {
+//		Map<String,String> result = new HashMap<String, String>();
+//		HttpSession session = req.getSession();
+//		String ruserId = "";
+//		String loginYN = "N";
+//		if(session != null && session.getAttribute("RUser")!=null ) {
+//			ruserId = ((RUserVO)session.getAttribute("RUser")).getRuserId();
+//			loginYN = "Y";
+//		}
+//		result.put("ruserId", ruserId);
+//		result.put("loginYN", loginYN);
+//		return result;
+//	}
 	// 로그아웃
 	@RequestMapping(value = "*/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) throws Exception {
@@ -80,10 +84,18 @@ public class RUserController {
 		return "redirect:/";
 	}
 
-	// 로그아웃2
+	//로그아웃2
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout2(HttpSession session) throws Exception {
-		session.invalidate();
+	public String logout2(HttpServletResponse response, HttpServletRequest request,HttpSession session/*@CookieValue(value="id",required=false)Cookie genderCookie*/) throws Exception {
+		System.out.println("로그아웃중@!!@!@!@");
+		//session.invalidate();
+		Cookie[] cookies = request.getCookies(); // 모든 쿠키의 정보를 cookies에 저장
+		if(cookies != null){ // 쿠키가 한개라도 있으면 실행
+			for(int i=0; i< cookies.length; i++){
+				cookies[i].setMaxAge(0); // 유효시간을 0으로 설정
+				response.addCookie(cookies[i]); // 응답 헤더에 추가
+			}
+		}
 		return "redirect:/";
 	}
 
@@ -153,6 +165,7 @@ public class RUserController {
 	@ResponseBody
 	@RequestMapping(value = "idCheck", method = RequestMethod.POST)
 	public int idCheck(@RequestBody Map<String, Object> params) throws Exception {
+		System.out.println("받아온 아이디"+params.get("ruserId"));
 		RUserVO ruservo = new RUserVO();
 		ruservo.setRuserId(params.get("ruserId").toString());
 		int result = RUserService.checkId(ruservo);
@@ -160,6 +173,15 @@ public class RUserController {
 		return result;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "checkPw", method = RequestMethod.POST)
+	public int loginPw(@RequestBody Map<String, Object> params) throws Exception {
+		RUserVO ruservo = new RUserVO();
+		System.out.println("param"+ params.get("ruserPw"));
+		ruservo.setRuserPw(params.get("ruserPw").toString());
+		int result = RUserService.checkPw(ruservo);
+		return result;
+	}
 //	// 뷰 통신 연습
 //	@ResponseBody
 //	@RequestMapping(value = "/idCheckJson", method = RequestMethod.GET)

@@ -10,6 +10,8 @@ public interface RUserDAO {
 	public RUserVO login(RUserVO VO) throws Exception;
 
 	public int checkId(RUserVO VO) throws Exception;
+	
+	public int checkPw(RUserVO VO) throws Exception;
 
 	public int checkEmail(RUserVO VO) throws Exception;
 

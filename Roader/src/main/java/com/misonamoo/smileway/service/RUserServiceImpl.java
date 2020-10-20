@@ -26,6 +26,12 @@ public class RUserServiceImpl implements RUserService {
 		int result = RUserDao.checkId(vo);
 		return result;
 	}
+	
+	@Override
+	public int checkPw(RUserVO vo) throws Exception {
+		int result = RUserDao.checkPw(vo);
+		return result;
+	}
 
 	@Override
 	public int checkEmail(RUserVO vo) throws Exception {
