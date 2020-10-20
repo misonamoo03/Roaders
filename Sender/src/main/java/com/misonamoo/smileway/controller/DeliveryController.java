@@ -100,13 +100,18 @@ public class DeliveryController {
 		HttpSession session = req.getSession();		
 		UserVO login = (UserVO)session.getAttribute("User");
 		
-		if(login != null && login.getSUSER_ID() != null ) {			
+		if(login != null && login.getSUSER_ID() != null ) {
 			cri.setSuserId(login.getSUSER_ID());			
 		}
 		
 		ItemPageMaker pageMaker = new ItemPageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(deliveryService.countDelivery(cri));
+		model.addAttribute("page", cri.getPage());
+		model.addAttribute("perPageNum", cri.getPerPageNum());
+		model.addAttribute("searchType", cri.getSearchType());
+		model.addAttribute("keyword", cri.getKeyword());
+		model.addAttribute("deliveryState", cri.getDeliveryState());
 		model.addAttribute("pageMaker",pageMaker);
 		
 		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
