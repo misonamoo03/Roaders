@@ -36,19 +36,21 @@
    </header>  
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li><a href="/item/itemList">상품관리</a></li>
-                <li><a href="/delivery/list">배송관리</a></li>
-            </ul>
-        </nav>
+        <form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="/delivery/list">전체배송</a></li>
-                    <li><a href="">배송중 상품</a></li>
-                    <li><a href="">배송완료 상품</a></li>
-                    <li><a href="">배송요청</a></li>
+                    <li><a href="/deliveryList">전체배송</a></li>
+                    <li><a href="/deliveryList">배송중 상품</a></li>
+                    <li><a href="/deliveryList">배송완료 상품</a></li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
                     <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>

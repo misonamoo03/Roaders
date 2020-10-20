@@ -47,7 +47,7 @@ public interface ItemDAO {
 	public void removeItemList(int ITEM_NO)throws Exception;
 
 	//상품 팝업 조회
-	public List<ItemVO> listItemPop() throws Exception;
+	public List<ItemVO> listItemPop(SearchCriteria cri) throws Exception;
 
 	
 }

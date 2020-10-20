@@ -73,9 +73,13 @@ public class DeliveryVO {
 	
 	private String CATAGORY_NAME;
 	
-	//배송상태	
+	//배송상태	+리뷰
 	private String ruserId;
 	private String reviewContent;
+	private String kindly;
+	private String promise;
+	private String speed;
+	private String totalStar;
 	
 	//필요한 내용 추가(한상희)
 	private String SUSER_NAME,
@@ -693,6 +697,38 @@ public class DeliveryVO {
 		this.reviewContent = reviewContent;
 	}
 
+	public String getKindly() {
+		return kindly;
+	}
+
+	public void setKindly(String kindly) {
+		this.kindly = kindly;
+	}
+
+	public String getPromise() {
+		return promise;
+	}
+
+	public void setPromise(String promise) {
+		this.promise = promise;
+	}
+
+	public String getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(String speed) {
+		this.speed = speed;
+	}
+
+	public String getTotalStar() {
+		return totalStar;
+	}
+
+	public void setTotalStar(String totalStar) {
+		this.totalStar = totalStar;
+	}
+
 	@Override
 	public String toString() {
 		return "DeliveryVO [ITEM_NO=" + ITEM_NO + ", DELIVERY_NUMBER=" + DELIVERY_NUMBER + ", DEL_CONTENT_NAME="
@@ -724,10 +760,13 @@ public class DeliveryVO {
 				+ LOCATION_TYPE_ARRIVAL + ", departureLatitudeX=" + departureLatitudeX + ", departureLongitudeY="
 				+ departureLongitudeY + ", arrivalLatitudeX=" + arrivalLatitudeX + ", arrivalLongitudeY="
 				+ arrivalLongitudeY + ", DEL_METHOD_CODE=" + DEL_METHOD_CODE + ", CATAGORY_NAME=" + CATAGORY_NAME
-				+ ", ruserId=" + ruserId + ", reviewContent=" + reviewContent + ", SUSER_NAME=" + SUSER_NAME
+				+ ", ruserId=" + ruserId + ", reviewContent=" + reviewContent + ", kindly=" + kindly + ", promise="
+				+ promise + ", speed=" + speed + ", totalStar=" + totalStar + ", SUSER_NAME=" + SUSER_NAME
 				+ ", SUSER_ID=" + SUSER_ID + ", SPHONE=" + SPHONE + ", DEL_CHANGE_TIME=" + DEL_CHANGE_TIME
 				+ ", DEL_PIC1=" + DEL_PIC1 + ", DEL_PIC2=" + DEL_PIC2 + ", DEL_PIC3=" + DEL_PIC3 + ", DEL_MESSAGE="
 				+ DEL_MESSAGE + ", GRADE_CODE=" + GRADE_CODE + ", SUSER_PHOTO=" + SUSER_PHOTO + "]";
 	}
+
+	
 	
 }

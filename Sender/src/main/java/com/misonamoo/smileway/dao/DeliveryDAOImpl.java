@@ -105,11 +105,7 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 		
 		return session.selectList(namespace+".delHistory",vo);
 	}
-
 	
-	
-	
-
 	@Override
 	public void updateDelItem(DeliveryVO deliveryVO) throws Exception {
 		session.update(namespace+".updateDelItem",deliveryVO);
@@ -165,7 +161,41 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 	}
 	//DETAIL_REVIEW_MAN 등록
 	@Override
-	public void registTotalReview(DeliveryVO deliveryVO) {
+	public void registTotalReview(DeliveryVO deliveryVO) throws Exception {
 		session.insert(namespace+".registTotalReview", deliveryVO);
+	}
+
+	//DETAIL_REVIEW_MAN 친절평점 등록
+	@Override
+	public void registKindlyReview(DeliveryVO deliveryVO) throws Exception {
+		session.insert(namespace+".registKindlyReview", deliveryVO);
+	}
+	
+	//DETAIL_REVIEW_MAN 약속평점 등록
+	@Override
+	public void registPromiseReview(DeliveryVO deliveryVO) throws Exception {
+		session.insert(namespace+".registPromiseReview", deliveryVO);
+	}
+	
+	//DETAIL_REVIEW_MAN 속도평점 등록
+	@Override
+	public void registSpeedReview(DeliveryVO deliveryVO) throws Exception {
+		session.insert(namespace+".registSpeedReview", deliveryVO);
+	}
+
+	//REVIEW_MAN - totalStart 업데이트
+	@Override
+	public void updateTotalReview(DeliveryVO deliveryVO) throws Exception {
+		session.update(namespace+".updateTotalReview", deliveryVO);
+	}
+
+	@Override
+	public void regConfirmDelHistory(DeliveryVO deliveryVO) throws Exception {
+		session.update(namespace+".regConfirmDelHistory", deliveryVO);
+	}
+
+	@Override
+	public void updateConfirmDelHistory(DeliveryVO deliveryVO) throws Exception {
+		session.update(namespace+".updateConfirmDelHistory", deliveryVO);
 	}
 }

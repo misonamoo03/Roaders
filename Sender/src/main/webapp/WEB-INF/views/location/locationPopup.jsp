@@ -12,7 +12,7 @@
 </head>
 <body>
 	<form>
-				<table border="1" style="width: 800px;" class="location-pop-table">
+		<table border="1" style="width: 800px;" class="location-pop-table">
 			<tr>
 				<td width="77">
 					<p align="center">장소</p>
@@ -42,6 +42,6 @@
 				</tr>
 			</c:forEach>
 		</table>
-		</form>
+	</form>
 </body>
 </html>

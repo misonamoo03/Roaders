@@ -96,9 +96,9 @@ public class ItemServiceImpl implements ItemService {
 
 	//상품 팝업 조회
 	@Override
-	public List<ItemVO> listItemPop() throws Exception {
+	public List<ItemVO> listItemPop(SearchCriteria cri) throws Exception {
 		
-		return dao.listItemPop();
+		return dao.listItemPop(cri);
 	}
 
 }

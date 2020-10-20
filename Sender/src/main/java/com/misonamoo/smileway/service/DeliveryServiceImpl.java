@@ -170,4 +170,40 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliveryDao.registTotalReview(deliveryVO);
 	}
 
+	//DETAIL_REVIEW_MAN 친절평점 등록
+	@Override
+	public void registKindlyReview(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.registKindlyReview(deliveryVO);
+	}
+
+	//DETAIL_REVIEW_MAN 약속평점 등록
+	@Override
+	public void registPromiseReview(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.registPromiseReview(deliveryVO);
+	}
+	
+	//DETAIL_REVIEW_MAN 속도평점 등록
+	@Override
+	public void registSpeedReview(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.registSpeedReview(deliveryVO);
+	}
+
+	//REVIEW_MAN - totalStart 업데이트
+	@Override
+	public void updateTotalReview(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.updateTotalReview(deliveryVO);
+	}
+
+	//DEL_STATE_HISTORY 배송완료승인 히스토리 추가
+	@Override
+	public void regConfirmDelHistory(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.regConfirmDelHistory(deliveryVO);
+	}
+
+	//DELIVERY_MAN 배송상태 수정 -> 6으로
+	@Override
+	public void updateConfirmDelHistory(DeliveryVO deliveryVO) throws Exception {
+		deliveryDao.updateConfirmDelHistory(deliveryVO);
+	}
+
 }

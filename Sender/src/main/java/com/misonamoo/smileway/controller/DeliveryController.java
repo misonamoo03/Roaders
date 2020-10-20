@@ -1,10 +1,12 @@
 package com.misonamoo.smileway.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.misonamoo.smileway.domain.ItemVO;
 import com.misonamoo.smileway.domain.SearchCriteria;
-
+import com.misonamoo.smileway.domain.UserVO;
 import com.misonamoo.smileway.domain.DeliveryVO;
 import com.misonamoo.smileway.domain.ItemPageMaker;
 import com.misonamoo.smileway.domain.ItemVO;
@@ -73,15 +76,13 @@ public class DeliveryController {
 		String fileName = null;
 
 		if(file != null) {
-		 fileName =  UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
+			fileName =  UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
 		} else {
-		 fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
+			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
 		}
 
 		deliveryVO.setDEL_CONTENT_PICTURE(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
 		deliveryVO.setDEL_CONTENT_PICTURE_Thum(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
-
-		System.out.println(deliveryVO.getArrivalLongitudeY());
 		
 		deliveryService.registDelItem(deliveryVO);
 		deliveryService.registDelLocationDepart(deliveryVO);
@@ -93,20 +94,29 @@ public class DeliveryController {
 	}
 	
 	@RequestMapping(value="/deliveryList", method = RequestMethod.GET)
-	public String list(Model model, @ModelAttribute("cri") SearchCriteria cri) throws Exception {
+	public String list(Model model, @ModelAttribute("cri") SearchCriteria cri,
+			HttpServletRequest req, RedirectAttributes rttr) throws Exception {
 		
-		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
-		model.addAttribute("list",list);
+		HttpSession session = req.getSession();		
+		UserVO login = (UserVO)session.getAttribute("User");
+		
+		if(login != null && login.getSUSER_ID() != null ) {			
+			cri.setSuserId(login.getSUSER_ID());			
+		}
 		
 		ItemPageMaker pageMaker = new ItemPageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(deliveryService.countDelivery(cri));
 		model.addAttribute("pageMaker",pageMaker);
 		
-		return "/delivery/list";
+		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
+		model.addAttribute("list",list);
+		
+		return "/delivery/list"; 
 	}
 	
-	@RequestMapping(value="/delivery/{DELIVERY_NUMBER}", method = RequestMethod.GET)
+	
+	@RequestMapping(value="/deliveryDetail/{DELIVERY_NUMBER}", method = RequestMethod.GET)
 	public String detail(@PathVariable("DELIVERY_NUMBER") int DELIVERY_NUMBER,
 			DeliveryVO deliveryVO, 
 			RUserVO ruserVO, Model model) throws Exception {
@@ -117,13 +127,10 @@ public class DeliveryController {
 		ruserVO = deliveryService.deliveryRoder(DELIVERY_NUMBER);
 		model.addAttribute("r", ruserVO);
 		
-		System.out.println(deliveryVO);
-		System.out.println(ruserVO);
-		
 		return "/delivery/detail";
 	}
 	
-	@RequestMapping(value="/delivery/edit", method = RequestMethod.GET)
+	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(DeliveryVO deliveryVO, int DELIVERY_NUMBER, Model model) throws Exception {
 		
 		//카테고리 조회하기 위해서 쓰는것
@@ -137,7 +144,7 @@ public class DeliveryController {
 		return "/delivery/edit";
 	}
 	
-	@RequestMapping(value="/delivery/edit", method = RequestMethod.POST)
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
 	public String edit(DeliveryVO deliveryVO, 
 			@RequestParam("file") MultipartFile file,
 			HttpServletRequest req) throws Exception {
@@ -172,14 +179,14 @@ public class DeliveryController {
 		return "redirect:/delivery/list";
 	}
 	
-	@RequestMapping(value="/delivery/delete", method = RequestMethod.GET)
+	@RequestMapping(value="/delete", method = RequestMethod.GET)
 	public String delete(int DELIVERY_NUMBER, Model model) throws Exception {
 		
 		deliveryService.deleteDelItem(DELIVERY_NUMBER);
 		deliveryService.deleteDelLocation(DELIVERY_NUMBER);
 		deliveryService.deleteDelInfo(DELIVERY_NUMBER);
 		
-		return "redirect:/delivery/list";
+		return "redirect:/deliveryList";
 	}
 	
 
@@ -187,14 +194,22 @@ public class DeliveryController {
 	
 	//상품 목록 팝업
 	@RequestMapping(value = "/delivery/itemList", method = RequestMethod.GET)
-	public String openItemListPop(Model model)throws Exception{
+	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, 
+			Model model, HttpServletRequest req, RedirectAttributes rttr)throws Exception{
+		
+		HttpSession session = req.getSession();		
+		UserVO login = (UserVO)session.getAttribute("User");
+		
+		if(login != null && login.getSUSER_ID() != null ) {	
+			cri.setSuserId(login.getSUSER_ID());			
+		}
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
 		catagoryList = itemService.catagoryList();
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
 		
-		List<ItemVO> list = itemService.listItemPop();
+		List<ItemVO> list = itemService.listItemPop(cri);
 		model.addAttribute("list",list);
 		
 		return "/delivery/ItemListPop";
@@ -276,9 +291,22 @@ public class DeliveryController {
 	@RequestMapping(value = "/delivery/confirm", method = RequestMethod.POST)
 	public String registPickupReview(DeliveryVO deliveryVO) throws Exception{
 		
-		System.out.println(deliveryVO.getDELIVERY_NUMBER());
-		//DETAIL_REVIEW_MAN 등록
+		//REVIEW_MAN 등록
 		deliveryService.registTotalReview(deliveryVO);
+		//DETAIL_REVIEW_MAN 친절평점 등록
+		deliveryService.registKindlyReview(deliveryVO);
+		//DETAIL_REVIEW_MAN 약속평점 등록
+		deliveryService.registPromiseReview(deliveryVO);
+		//DETAIL_REVIEW_MAN 속도평점 등록
+		deliveryService.registSpeedReview(deliveryVO);
+		//REVIEW_MAN - totalStart 업데이트
+		deliveryService.updateTotalReview(deliveryVO);
+		
+		//DEL_STATE_HISTORY 배송완료승인 히스토리 추가
+		deliveryService.regConfirmDelHistory(deliveryVO);
+		
+		//DELIVERY_MAN 배송상태 수정 -> 6으로
+		deliveryService.updateConfirmDelHistory(deliveryVO);
 		
 		return "/delivery/ConfirmPurchasePop";
 	}

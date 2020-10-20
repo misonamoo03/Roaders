@@ -1,7 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ page import="com.misonamoo.smileway.domain.UserVO"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
     <title>센더스</title>
     <link rel="stylesheet" href="/resources/css/reset.css">
     <link rel="stylesheet" href="/resources/css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>       	
 </head>
 <body>
     <header class="header">
@@ -29,6 +30,7 @@
 				<nav>
 					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
 						formmethod="get" id="logoutBtn" value="로그아웃">
+					<input type="hidden" value="${User.SUSER_ID}" class="suser-id">
 				</nav>
 			</c:if>
 		</form>
@@ -46,45 +48,29 @@
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="">전체배송</a></li>
-                    <li><a href="">배송중 상품</a></li>
-                    <li><a href="">배송완료 상품</a></li>
-                    <li><a href="">배송요청</a></li>
+                    <li><a href="/deliveryList">전체배송</a></li>
+                    <li class="delivery-ing delivery-menu">
+                    	배송중 상품</li>
+                    <li class="delivery-complete delivery-menu">
+                    	배송완료 상품
+                    </li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
                     <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">
-            <style>
-            	.delivery-list-table {
-            		width: 1300px;
-            		border: 1px solid #979797;
-            	}
-            	.delivery-list-table th {
-            		height: 50px;
-            		text-align: center;
-            		background-color: #ddd;
-            		border-bottom: 1px solid #979797;
-            	}
-            	.delivery-list-table td {
-            		padding: 5px;
-            		text-align: center;
-            		border-right: 1px solid #979797;
-            		border-bottom: 1px solid #979797;
-            	}
-            	.delivery-list-table .location-td {
-            		text-align: left;
-            		text-indent: 10px;
-            	}
-            </style>
+            
+            
             	<ul>
 				
-					<li>상품명  <input type="text" name='keyword' id="keywordInput" value='${cri.keyword}'>
+					<li>상품명  <input type="text" name='keyword' id="keywordInput" value='${cri.keyword}'></li>
 					<li>
 						배송타입  
 						<input type="radio" name="searchType" value="A" <c:out value="${cri.searchType == null?'checked':''}"/>> 전체 
 						<input type="radio" name="searchType" value="Y" <c:out value="${cri.searchType eq 'Y'?'checked':''}"/>> 보내기 
 						<input type="radio" name="searchType" value="N" <c:out value="${cri.searchType eq 'N'?'checked':''}"/>> 가져오기
-					<li><button id='searchBtn'>조회</button>
+					</li>
+					<li><button id='searchBtn'>조회</button></li>
 					
 				</ul>
             
@@ -93,7 +79,7 @@
 	            </a>
                 <table class="delivery-list-table">
                     <thead>
-                        <tr>
+                         <tr>
                             <th>No</th>
                             <th>배송타입</th>
                             <th>이미지</th>
@@ -101,7 +87,6 @@
                             <th>출발</th>
                             <th>도착</th>
                             <th>상태</th>
-                            <th>로더</th>
                             <th>배송비</th>
                             <th>관리</th>
                         </tr>
@@ -109,13 +94,13 @@
                     <tbody>
                         <c:forEach items="${list}" var="list" varStatus="st" >
                             <tr>
-                                <td>${list.DELIVERY_NUMBER}</td>
+                                <td>${st.count}</td>
                                 <td>${list.DEL_CONTENT_STATE}</td>
                                 <td>
                                 	<img style="width: 120px;" src="${list.DEL_CONTENT_PICTURE_Thum}">
                                 </td>
                                 <td>
-                                	<a href="/delivery/${list.DELIVERY_NUMBER}">
+                                	<a href="/deliveryDetail/${list.DELIVERY_NUMBER}">
                                 		${list.DEL_CONTENT_NAME}
                                 	</a>
                                 </td>
@@ -155,7 +140,6 @@
 	                              	</c:if>
                                 
                                 </td>
-                                <td>로더</td>
                                 <td>${list.DELIVERY_PRICE}원</td>
                                 <td>
                                 	<a href="edit?DELIVERY_NUMBER=${list.DELIVERY_NUMBER}">
@@ -175,7 +159,7 @@
 	
 						<c:if test="${pageMaker.prev}">
 							<li>
-							 <a href="/delivery/list${pageMaker.makeQuery(pageMaker.startPage - 1)}">&laquo;</a>
+							 <a href="/deliveryList${pageMaker.makeQuery(pageMaker.startPage - 1)}">&laquo;</a>
 							</li>
 						</c:if>
 	
@@ -183,20 +167,18 @@
 							end="${pageMaker.endPage }" var="idx">
 							<li
 								<c:out value="${pageMaker.cri.page == idx?'class =active':''}"/>>
-							 	<a href="/delivery/list${pageMaker.makeQuery(idx)}">[${idx}]</a>
+							 	<a href="/deliveryList${pageMaker.makeQuery(idx)}">[${idx}]</a>
 							</li>
 						</c:forEach>
 	
 						<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
 							<li>
-							 <a href="/delivery/list${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a>
+							 <a href="/deliveryList${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a>
 							</li>
 						</c:if>
 	
 					</ul>
-				</div>  
-                
-                
+				</div>
             </div>
         </section>
     </main>
@@ -228,18 +210,31 @@
         ⓒ Misonamoo Corp
     </footer>
     <script type="text/javascript">
-	$(document).ready(
-			function() {
-				$('#searchBtn').on(
-						"click",
-						function(event) {
-							self.location = "list"
-									+ '${pageMaker.makeQuery(1)}'
-									+ "&searchType="
-									+ $('input[name=searchType]:checked').val()
-									+ "&keyword=" + $('#keywordInput').val();
-						});
-			});
+	$(document).ready(function() {
+		
+		$('#searchBtn').on("click", function(event) {
+			self.location = "deliveryList"
+			+ '${pageMaker.makeQuery(1)}'
+			+ "&searchType="
+			+ $('input[name=searchType]:checked').val()
+			+ "&keyword=" + $('#keywordInput').val();
+		});
+
+		$('.delivery-ing').on("click", function(event) {
+			self.location = "deliveryList"
+			+ '${pageMaker.makeQuery(1)}'
+			+ "&deliveryState=I"
+			+ "&keyword=" + $('#keywordInput').val();
+		});
+		
+		$('.delivery-complete').on("click", function(event) {
+			self.location = "deliveryList"
+			+ '${pageMaker.makeQuery(1)}'
+			+ "&deliveryState=C"
+			+ "&keyword=" + $('#keywordInput').val();
+		});
+		
+	});
 	</script>
 
 </body>

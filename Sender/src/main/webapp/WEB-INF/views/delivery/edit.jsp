@@ -34,13 +34,14 @@
 	</header>  
 
     <main class="main">
-        <nav class="sub-menu">
-            <ul>
-                <li>상품관리</li>
-                <li>배송관리</li>
-                <li>회원정보</li>
-            </ul>
-        </nav>
+        <form>
+			<c:if test="${User == null }">
+				
+			</c:if>
+			<c:if test="${User != null }">
+				<%@include file="../nav.jsp" %>
+			</c:if>
+		</form>
         <section class="main-container">
             <aside class="aside">
                 <ul>
@@ -189,8 +190,8 @@
                                         <br>
                                         <input type="text" class="address-basic address required" name="LOCATION_ADDRESS" value="${d.DEPART_ADDRESS}" readonly><br>
                                         <input type="text" class="address-detail address" name="LOCATION_ADDRESS_DTL" value="${d.DEPART_ADDRESS_DTL}" placeholder="상세 주소">
-                                    	<input type="text" class="depart-x require" name="departureLatitudeX" value="${d.DEPART_LATITUDE}">
-                                        <input type="text" class="depart-y require" name="departureLongitudeY" value="${d.DEPART_LONGITUDE}">
+                                    	<input type="hidden" class="depart-x require" name="departureLatitudeX" value="${d.DEPART_LATITUDE}">
+                                        <input type="hidden" class="depart-y require" name="departureLongitudeY" value="${d.DEPART_LONGITUDE}">
                                     </td>
                                 </tr>
                             </tbody>
@@ -228,8 +229,8 @@
                                         <br>
                                         <input type="text" class="address-basic address required" name="LOCATION_ADDRESS_ARRIVAL" value="${d.ARRIVAL_ADDRESS}" readonly><br>
                                         <input type="text" class="address-detail address" name="LOCATION_ADDRESS_DTL_ARRIVAL" value="${d.ARRIVAL_ADDRESS_DTL}" placeholder="상세 주소">
-                                    	<input type="text" class="arrival-x require" name="arrivalLatitudeX" value="${d.ARRIVAL_LATITUDE}">
-                                        <input type="text" class="arrival-y require" name="arrivalLongitudeY" value="${d.ARRIVAL_LONGITUDE}">
+                                    	<input type="hidden" class="arrival-x require" name="arrivalLatitudeX" value="${d.ARRIVAL_LATITUDE}">
+                                        <input type="hidden" class="arrival-y require" name="arrivalLongitudeY" value="${d.ARRIVAL_LONGITUDE}">
                                     </td>
                                 </tr>
                             </tbody>

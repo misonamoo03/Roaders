@@ -74,5 +74,21 @@ public interface DeliveryService {
 	//DETAIL_REVIEW_MAN 등록
 	public void registTotalReview(DeliveryVO deliveryVO) throws Exception;
 
+	//DETAIL_REVIEW_MAN 친절평점 등록
+	public void registKindlyReview(DeliveryVO deliveryVO) throws Exception;
 
+	//DETAIL_REVIEW_MAN 약속평점 등록
+	public void registPromiseReview(DeliveryVO deliveryVO) throws Exception;
+
+	//DETAIL_REVIEW_MAN 속도 등록
+	public void registSpeedReview(DeliveryVO deliveryVO) throws Exception;
+
+	//REVIEW_MAN - totalStart 업데이트
+	public void updateTotalReview(DeliveryVO deliveryVO) throws Exception;
+
+	//DEL_STATE_HISTORY 배송완료승인 히스토리 추가
+	public void regConfirmDelHistory(DeliveryVO deliveryVO) throws Exception;
+	
+	//DELIVERY_MAN 배송상태 수정 -> 6으로
+	public void updateConfirmDelHistory(DeliveryVO deliveryVO) throws Exception;
 }
