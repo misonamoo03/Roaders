@@ -18,7 +18,7 @@
 			<span class="font-color-orange">가는길에</span> @센더스
 		</h1>
 		<form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				<nav>
 					<ul>
 						<li><a href="/loginform">로그인</a></li>
@@ -26,22 +26,19 @@
 					</ul>
 				</nav>
 			</c:if>
-			<c:if test="${User != null }">
-				<nav>
-					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
-						formmethod="get" id="logoutBtn" value="로그아웃">
-					<input type="hidden" value="${User.SUSER_ID}" class="suser-id">
-				</nav>
+			<c:if test="${cookie.id != null }">
+				<img src="C:\Users\User\Desktop\1.jpg">${cookie.id.value}
+				 | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
 			</c:if>
 		</form>
 	</header>  
 
     <main class="main">
         <form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				
 			</c:if>
-			<c:if test="${User != null }">
+			<c:if test="${cookie.id != null }">
 				<%@include file="../nav.jsp" %>
 			</c:if>
 		</form>
@@ -59,24 +56,31 @@
                 </ul>
             </aside>
             <div class="sub-main">
-            
-            
-            	<ul>
-				
-					<li>상품명  <input type="text" name='keyword' id="keywordInput" value='${cri.keyword}'></li>
-					<li>
-						배송타입  
-						<input type="radio" name="searchType" value="A" <c:out value="${cri.searchType == null?'checked':''}"/>> 전체 
-						<input type="radio" name="searchType" value="Y" <c:out value="${cri.searchType eq 'Y'?'checked':''}"/>> 보내기 
-						<input type="radio" name="searchType" value="N" <c:out value="${cri.searchType eq 'N'?'checked':''}"/>> 가져오기
-					</li>
-					<li><button id='searchBtn'>조회</button></li>
-					
-				</ul>
-            
-	            <a href="/delivery/regist">
-	            	<button type="button">배송등록</button>
-	            </a>
+	            <c:choose>
+	            	<c:when test="${cri.deliveryState eq 'I'}">
+	            	
+	            	</c:when>
+	            	<c:when test="${cri.deliveryState eq 'C'}">
+	            	
+	            	</c:when>
+	            	<c:otherwise>
+	            	
+		            	<ul>				
+							<li>상품명  <input type="text" name='keyword' id="keywordInput" value='${cri.keyword}'></li>
+							<li>
+								배송타입  
+								<input type="radio" name="searchType" value="A" <c:out value="${cri.searchType == null?'checked':''}"/>> 전체 
+								<input type="radio" name="searchType" value="Y" <c:out value="${cri.searchType eq 'Y'?'checked':''}"/>> 보내기 
+								<input type="radio" name="searchType" value="N" <c:out value="${cri.searchType eq 'N'?'checked':''}"/>> 가져오기
+							</li>
+							<li><button id='searchBtn'>조회</button></li>
+						</ul>            
+			            <a href="/delivery/regist">
+			            	<button type="button">배송등록</button>
+			            </a>	            	
+	            	</c:otherwise>
+	            </c:choose>
+            	
                 <table class="delivery-list-table">
                     <thead>
                          <tr>
@@ -159,24 +163,35 @@
 	
 						<c:if test="${pageMaker.prev}">
 							<li>
-							 <a href="/deliveryList${pageMaker.makeQuery(pageMaker.startPage - 1)}">&laquo;</a>
+								<a href="/deliveryList
+								${pageMaker.makeQuery(pageMaker.startPage - 1)}
+								&searchType=${cri.searchType}
+								&keyword=${cri.keyword}
+								&deliveryState=${cri.deliveryState}">&laquo;</a>
 							</li>
 						</c:if>
 	
 						<c:forEach begin="${pageMaker.startPage }"
 							end="${pageMaker.endPage }" var="idx">
-							<li
-								<c:out value="${pageMaker.cri.page == idx?'class =active':''}"/>>
-							 	<a href="/deliveryList${pageMaker.makeQuery(idx)}">[${idx}]</a>
+							<li>
+								<a href="/deliveryList
+								?page=${cri.page}&perPageNum=${cri.perPageNum}
+								&searchType=${cri.searchType}
+								&keyword=${cri.keyword}
+								&deliveryState=${cri.deliveryState}">[${idx}]</a>
 							</li>
 						</c:forEach>
 	
 						<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
 							<li>
-							 <a href="/deliveryList${pageMaker.makeQuery(pageMaker.endPage + 1)}">&raquo;</a>
+								<a href="/deliveryList
+								${pageMaker.makeQuery(pageMaker.endPage + 1)}
+								&searchType=${cri.searchType}
+								&keyword=${cri.keyword}
+								&deliveryState=${cri.deliveryState}">&raquo;</a>
 							</li>
 						</c:if>
-	
+						
 					</ul>
 				</div>
             </div>
@@ -213,7 +228,7 @@
 	$(document).ready(function() {
 		
 		$('#searchBtn').on("click", function(event) {
-			self.location = "deliveryList"
+			location.href = "deliveryList"
 			+ '${pageMaker.makeQuery(1)}'
 			+ "&searchType="
 			+ $('input[name=searchType]:checked').val()
@@ -223,15 +238,13 @@
 		$('.delivery-ing').on("click", function(event) {
 			self.location = "deliveryList"
 			+ '${pageMaker.makeQuery(1)}'
-			+ "&deliveryState=I"
-			+ "&keyword=" + $('#keywordInput').val();
+			+ "&deliveryState=I";
 		});
 		
 		$('.delivery-complete').on("click", function(event) {
 			self.location = "deliveryList"
 			+ '${pageMaker.makeQuery(1)}'
-			+ "&deliveryState=C"
-			+ "&keyword=" + $('#keywordInput').val();
+			+ "&deliveryState=C";
 		});
 		
 	});
