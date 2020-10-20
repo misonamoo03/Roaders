@@ -30,10 +30,8 @@
 						<c:if test="${list.ruserGrade == 1}">골드회원</c:if>
 					</p>
 					<p>회원아이디 : ${list.ruserId}(${list.ruserName})</p>
-					<p>평점 : ${list.ruserStar}</p>
 					<p>배송횟수 : ${list.ruserDeliveryCnt}</p>
 					<p>적립금 : ${list.ruserPoint}</p>
-					<p>리뷰갯수 : ${list.reviewCount}</p>
 					<p>픽업 가능 시간 : ${list.pickupTime}</p>
 					<p>픽업 요청 메시지 : ${list.message}</p>
 					<p>

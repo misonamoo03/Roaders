@@ -80,6 +80,7 @@ public class DeliveryController {
 		// 이후 미리 ListVO에 deliveryNumber 값을 세팅해준다.
 		DeliveryListVO dlvo = new DeliveryListVO();
 		dlvo.setDeliveryNumber(deliveryNumber);
+		
 		return deliveryService.selectPoint(dlvo);
 	}
 	
