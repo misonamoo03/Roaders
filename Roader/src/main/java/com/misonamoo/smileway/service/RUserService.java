@@ -10,7 +10,9 @@ public interface RUserService {
 	public RUserVO login(RUserVO vo) throws Exception;
 
 	public int checkId(RUserVO vo) throws Exception;
-
+	
+	public int checkPw(RUserVO vo) throws Exception;
+	
 	public int checkEmail(RUserVO vo) throws Exception;
 
 	public void signUp(RUserVO vo) throws Exception;

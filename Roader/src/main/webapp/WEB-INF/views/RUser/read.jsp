@@ -16,6 +16,16 @@
 
 $(function(){
 	$( document ).ready(function() {
+		let emailTwo='@'+'${RUserVO.ruserEmail1[1]}';
+		let ruserEmail2= $("#ruserEmail2").val();
+		/*
+		$("#emailTwo option").each(function(){
+			if($(this).val()=="${RUserVO.ruserEmail1[1]}"){
+    			$(this).attr("selected","selected"); // attr적용안될경우 prop으로 
+    		}
+		});*/
+		$("#emailTwo").val(emailTwo);
+		
 		var ruserAgreOption = "${RUserVO.ruserAgreOption}";
 		if(ruserAgreOption == "Y"){
 			$("#option").prop('checked', true);
@@ -86,7 +96,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
             <span class="font-color-orange">가는길에</span> @센더스
         </h1>
         <form>
-         <c:if test="${RUser == null }">
+         <c:if test="${cookie.id == null }">
             <nav>
                <ul>
                   <li><a href="/loginform">로그인</a></li>
@@ -94,9 +104,9 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
                </ul>
             </nav>
          </c:if>	
-		<c:if test="${RUser != null }">
+		<c:if test="${cookie.id != null }">
             <nav>
-          <a href="/read?ruserId=${RUser.ruserId}">${RUser.ruserId}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
+          <a href="/read?ruserId=${cookie.id.value}">${cookie.id.value}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
             </nav>
       </div>
     <style>
@@ -143,10 +153,10 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 				아이디:	<input type="text" readonly="readonly" id="ruserId" name="ruserId" value="${RUserVO.ruserId}" size="40" > &nbsp;&nbsp;수정불가<br>
 				이름 :	<input type="text" name="ruserName" id="ruserName" value="${RUserVO.ruserName}" size="40" maxlength="10" ><br>
 				이메일 :	<input type="text" name="ruserEmail" id="ruserEmail" value="${RUserVO.ruserEmail1[0]}" size="40" >@
-				<select	name="emailTwo">
-					<option value="${RUserVO.ruserEmail1[1]}">${RUserVO.ruserEmail1[1]}</option>
-					<option value="@gmail.com">gmail.com</option>
+				<input type="hidden" name="ruserEmail2" id="ruserEmail2" value="${RUserVO.ruserEmail1[1]}">
+				<select	name="emailTwo" id="emailTwo">
 					<option value="@naver.com">naver.com</option>
+					<option value="@gmail.com">gmail.com</option>
 					<option value="@daum.net">daum.net</option>
 					<option value="@nate.com">nate.com</option>
 				</select><br>
