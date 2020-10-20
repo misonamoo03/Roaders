@@ -29,9 +29,9 @@ public class ItemDAOImpl implements ItemDAO {
 	
 	//카테고리 조회
 	@Override
-	public List<ItemVO> catagoryList() throws Exception {
+	public List<ItemVO> catagoryList(ItemVO vo) throws Exception {
 		
-		return session.selectList(namespace+".catagoryList");
+		return session.selectList(namespace+".catagoryList",vo);
 	}
 
 	//상품 등록

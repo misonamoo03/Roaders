@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -76,11 +78,14 @@ public class ItemController {
 	
 	//카테고리 조회
 	@RequestMapping(value="/catagory", method = RequestMethod.GET)
-	public String getcatagoryList(Model model)throws Exception {
+	public String getcatagoryList(Model model, @ModelAttribute("ivo") ItemVO ivo, 
+				@CookieValue(value="id",required=false)Cookie genderCookie)throws Exception {
 		
 		logger.info("show catagory.............");
 		
-		List<ItemVO> list = itemService.catagoryList();
+		ivo.setSUSER_ID(genderCookie.getValue());
+		
+		List<ItemVO> list = itemService.catagoryList(ivo);
 		
 		model.addAttribute("list",list);
 		
@@ -89,7 +94,9 @@ public class ItemController {
 	
 	//카테고리 등록
 	@RequestMapping(value="/catagory", method = RequestMethod.POST)
-	public String insertCatagory(ItemVO item) throws Exception {
+	public String insertCatagory(ItemVO item,@CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
+		
+		item.setSUSER_ID(genderCookie.getValue());
 		
 		itemService.registCatagory(item);
 		return "redirect:/item/catagory";
