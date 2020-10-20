@@ -79,6 +79,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(RUSER_ID) from ROADUSER where RUSER_ID=#{ruserId}/* 회원가입화면에서 입력한 아이디값 중복을 확인하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.checkId | 김진호  */    
 	</select>
 	
+	<!-- 아이디 중복 조회하기 -->
+	<select id="checkPw" resultType="int">
+		select count(RUSER_PW) from ROADUSER where RUSER_PW=#{ruserPw}/* 회원가입화면에서 입력한 아이디값 중복을 확인하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.checkId | 김진호  */    
+	</select>
+	
 	<!-- 이메일 중복 조회등록하기 -->
 	<select id="checkEmail" resultType="int">
 		select count(RUSER_ID) from ROADUSER where RUSER_ID=#{ruserId}/* 회원가입화면에서 입력한 이메일값 중복을 확인하는 쿼리 | com.misonamoo.smileway.mappers.RuserServiceImpl.checkEmail | 김진호  */

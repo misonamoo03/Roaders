@@ -29,6 +29,12 @@ public class RUserDAOImpl implements RUserDAO {
 		// TODO Auto-generated method stub
 		return session.selectOne(namespace + ".checkId", VO);
 	}
+	
+	@Override
+	public int checkPw(RUserVO VO) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne(namespace + ".checkPw", VO);
+	}
 
 	@Override
 	public int checkEmail(RUserVO VO) throws Exception {
