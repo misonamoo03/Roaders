@@ -23,13 +23,13 @@ public class CommonUtil {
   
   public static UserVO cookieUserInfo(HttpServletRequest req){
 	  HttpSession session = req.getSession();		
-		UserVO login = (UserVO)session.getAttribute("User");
-		
-		if(login != null && login.getSUSER_ID() != null ) {	
-			return login;			
-		}else {
-			return null;
-		}
+	UserVO login = (UserVO)session.getAttribute("User");
+	
+	if(login != null && login.getSUSER_ID() != null ) {	
+		return login;			
+	}else {
+		return null;
+	}
     
   }
    
