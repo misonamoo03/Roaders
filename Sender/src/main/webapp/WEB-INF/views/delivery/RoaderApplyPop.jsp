@@ -30,10 +30,6 @@
 						<c:if test="${list.ruserGrade == 1}">골드회원</c:if>
 					</p>
 					<p>회원아이디 : ${list.ruserId}(${list.ruserName})</p>
-					<p>별점 :
-					<c:forEach var = "i" begin = "1" end = "${list.ruserStar}"> ★ </c:forEach>
-					<c:forEach var = "i" begin = "${list.ruserStar}" end ="4" >  ☆</c:forEach>
-					 </p>
 					<p>평점 : ${list.ruserStar}</p>
 					<p>배송횟수 : ${list.ruserDeliveryCnt}</p>
 					<p>적립금 : ${list.ruserPoint}</p>

@@ -289,59 +289,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	<!-- 로더 지원 목록 팝업 -->
 	<select id="openApplyRoaderPop" resultType="com.misonamoo.smileway.domain.RUserVO">
-		SELECT 
-			R.RUSER_PHOTO AS ruserPhoto, 
-   			R.RUSER_ID AS ruserId, 
-   			R.RUSER_NAME AS ruserName,
-   			R.RUSER_POINT AS ruserPoint,
-   			(
-      			SELECT 
-      				COUNT(DC.RUSER_ID)
-      			FROM 
-      				DELIVERY_MAN DM 
-      			INNER JOIN 
-      				DEL_CANDIDATE DC 
-      			ON 
-      				DM.DELIVERY_NUMBER = DC.DELIVERY_NUMBER
-      			WHERE 
-      				DM.DELIVERY_STATE = 7 
-      			AND 
-      				DC.CANDIDATE_STATE = 1
-      			AND 
-      				DC.RUSER_ID= R.RUSER_ID
-   			) AS ruserDeliveryCnt,
-   			(
-      			SELECT 
-      				COUNT(RM.TOTAL_STAR) 
-				FROM 
-					REVIEW_MAN RM 
-				WHERE 
-					RM.RUSER_ID = R.RUSER_ID
-  			) AS reviewCount,
-   			(
-         		SELECT 
-         			SUM(RM.TOTAL_STAR)
-				FROM 
-					REVIEW_MAN RM 
-				WHERE 
-					RM.RUSER_ID = R.RUSER_ID
-  	 		)AS reviewTotalStar,
-  	 		IFNULL(RG.RGRADE_CODE,'3') AS ruserGrade,
-   			DC.PICKUP_TIME AS pickupTime,
-   			DC.MESSAGE AS message,
-            DC.DELIVERY_NUMBER as deliveryNumber
-   FROM 
-   		ROADUSER R 
-   INNER JOIN 
-   		DEL_CANDIDATE DC 
-   ON 
-   		R.RUSER_ID = DC.RUSER_ID
-   LEFT OUTER JOIN 
-   		RUSER_GRADE RG 
-   ON 
-   		R.RUSER_ID = RG.RUSER_ID
-   WHERE 
-   		DC.DELIVERY_NUMBER = #{deliveryNumber}
+		SELECT * FROM 
+			DEL_CANDIDATE DC
+		JOIN 
+			ROADUSER RU 
+		ON 
+			DC.RUSER_ID = RU.RUSER_ID
+		WHERE 
+			DELIVERY_NUMBER = #{deliveryNumber}
 	</select>
 
 <!-- 배송 히스토리 타임라인 팝업  -->
