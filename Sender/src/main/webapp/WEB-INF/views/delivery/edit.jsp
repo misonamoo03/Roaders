@@ -43,11 +43,14 @@
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="">전체배송</a></li>
-                    <li><a href="">배송중 상품</a></li>
-                    <li><a href="">배송완료 상품</a></li>
-                    <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/deliveryList">전체배송</a></li>
+                    <li class="delivery-ing delivery-menu">
+                    	배송중 상품</li>
+                    <li class="delivery-complete delivery-menu">
+                    	배송완료 상품
+                    </li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">

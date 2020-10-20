@@ -553,6 +553,8 @@
 		//컨트롤러에서 데이터 받기
 		var jsonData = JSON.parse('${catagoryList}');
 
+		console.log(jsonData)
+
 		var cateArr = new Array();
 		var cateObj = new Object();
 
@@ -568,9 +570,9 @@
 		//1차 분류 셀렉트 박스에 데이터 삽입
 		var cateSelect = $("select.catagory")
 
-		for(var i = 0; i < cateArr.length; i++) {
+		for(var i = 0; i < cateArr.length; i++) {  
 			cateSelect.append("<option value='" + cateArr[i].CATAGORY_ID + "'>"
-				      + cateArr[i].CATAGORY_NAME + "</option>");  
+				      + cateArr[i].CATAGORY_NAME + "</option>");    
 		}
 		
 		//이미지 첨부

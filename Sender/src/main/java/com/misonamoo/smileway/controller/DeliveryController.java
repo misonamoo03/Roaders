@@ -3,6 +3,7 @@ package com.misonamoo.smileway.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -59,12 +60,17 @@ public class DeliveryController {
 
 	
 	@RequestMapping(value="/delivery/regist", method = RequestMethod.GET)
-	public String regist(Model model) throws Exception {
+	public String regist(Model model, ItemVO itemVO,
+			@CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
+
+		
+		itemVO.setSUSER_ID(genderCookie.getValue());
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
+		System.out.println(catagoryList);
 		
 		return "/delivery/regist";
 	}
@@ -134,11 +140,11 @@ public class DeliveryController {
 	}
 	
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
-	public String edit(DeliveryVO deliveryVO, int DELIVERY_NUMBER, Model model) throws Exception {
+	public String edit(DeliveryVO deliveryVO, int DELIVERY_NUMBER, ItemVO itemVO, Model model) throws Exception {
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
         
 		deliveryVO = deliveryService.deliveryDetail(DELIVERY_NUMBER);
@@ -197,7 +203,7 @@ public class DeliveryController {
 	
 	//상품 목록 팝업
 	@RequestMapping(value = "/delivery/itemList", method = RequestMethod.GET)
-	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, 
+	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, ItemVO itemVO,
 			Model model, @CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
 
 		
@@ -205,7 +211,7 @@ public class DeliveryController {
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
 		
 		List<ItemVO> list = itemService.listItemPop(cri);
