@@ -70,7 +70,7 @@
 						async: false,
 						data : JSON.stringify(param),
 						success : function(res){
-							if(res == 0){
+							if(res != 0){
 							alert("성공");
 							location.href="/";
 							}else{

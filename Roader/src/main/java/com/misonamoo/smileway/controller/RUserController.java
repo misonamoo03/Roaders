@@ -46,11 +46,6 @@ public class RUserController {
 		RUserVO vo = new RUserVO();
 		vo.setRuserId(params.get("ruserId").toString());
 		vo.setRuserPw(params.get("ruserPw").toString());
-		logger.info("받은값");
-		System.out.println(vo.getRuserId());
-		System.out.println(vo.getRuserPw());
-		logger.info(vo.getRuserId());
-		logger.info(vo.getRuserPw());
 		//HttpSession session = req.getSession();
 		RUserVO login = RUserService.login(vo);
 		if (login == null) {
