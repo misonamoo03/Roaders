@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.misonamoo.smileway.domain.CodeVO;
 import com.misonamoo.smileway.domain.Email;
 import com.misonamoo.smileway.domain.EmailSender;
+import com.misonamoo.smileway.domain.MD5;
 import com.misonamoo.smileway.domain.RUserVO;
 import com.misonamoo.smileway.service.RUserService;
 
@@ -45,7 +46,9 @@ public class RUserController {
 	public RUserVO login(@RequestBody Map<String, Object> params, HttpServletRequest req, RedirectAttributes rttr,HttpServletResponse response) throws Exception {
 		RUserVO vo = new RUserVO();
 		vo.setRuserId(params.get("ruserId").toString());
-		vo.setRuserPw(params.get("ruserPw").toString());
+		vo.setRuserPw(MD5.testMD5(params.get("ruserPw").toString()));
+		System.out.println("@@@@"+vo.getRuserPw());
+		logger.info(MD5.testMD5(params.get("ruserPw").toString()));
 		//HttpSession session = req.getSession();
 		RUserVO login = RUserService.login(vo);
 		if (login == null) {
@@ -141,7 +144,7 @@ public class RUserController {
 		RUserVO ruservo = new RUserVO();
 
 		ruservo.setRuserId(params.get("ruserId").toString());
-		ruservo.setRuserPw(params.get("ruserPw").toString());
+		ruservo.setRuserPw(MD5.testMD5(params.get("ruserPw").toString()));
 		ruservo.setRuserEmail(params.get("ruserEmail").toString());
 		ruservo.setrPhone(params.get("rPhone").toString());
 		ruservo.setRuserName(params.get("ruserName").toString());
@@ -165,7 +168,6 @@ public class RUserController {
 	@ResponseBody
 	@RequestMapping(value = "idCheck", method = RequestMethod.POST)
 	public int idCheck(@RequestBody Map<String, Object> params) throws Exception {
-		System.out.println("받아온 아이디"+params.get("ruserId"));
 		RUserVO ruservo = new RUserVO();
 		ruservo.setRuserId(params.get("ruserId").toString());
 		int result = RUserService.checkId(ruservo);
@@ -177,8 +179,7 @@ public class RUserController {
 	@RequestMapping(value = "checkPw", method = RequestMethod.POST)
 	public int loginPw(@RequestBody Map<String, Object> params) throws Exception {
 		RUserVO ruservo = new RUserVO();
-		System.out.println("param"+ params.get("ruserPw"));
-		ruservo.setRuserPw(params.get("ruserPw").toString());
+		ruservo.setRuserPw(MD5.testMD5(params.get("ruserPw").toString()));
 		int result = RUserService.checkPw(ruservo);
 		return result;
 	}
@@ -355,8 +356,7 @@ public class RUserController {
 		System.out.println(secNo + "::::::::::회원번호");
 		System.out.println(vo.getRuserPw() + ":::::::::비밀번호");
 		rvo.setRuserNo(secNo);
-		
-		rvo.setRuserPw(vo.getRuserPw());
+		rvo.setRuserPw(MD5.testMD5(vo.getRuserPw().toString()));
 		RUserService.updatePw(rvo);
 		mav = new ModelAndView("/index");
 		return mav;

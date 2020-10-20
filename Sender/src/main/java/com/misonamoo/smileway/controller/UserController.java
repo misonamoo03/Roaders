@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.misonamoo.smileway.domain.RUserVO;
 import com.misonamoo.smileway.domain.UserVO;
 import com.misonamoo.smileway.service.UserService;
 
@@ -73,8 +73,9 @@ public class UserController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout2(HttpServletResponse response, HttpServletRequest request,
-			HttpSession session/*@CookieValue(value="id",required=false)Cookie genderCookie */) throws Exception {
+			HttpSession session,@CookieValue(value="id",required=false)Cookie genderCookie ) throws Exception {
 		System.out.println("로그아웃중@!!@!@!@");
+		System.out.println(genderCookie.getValue());
 		// session.invalidate();
 		Cookie[] cookies = request.getCookies(); // 모든 쿠키의 정보를 cookies에 저장
 		if (cookies != null) { // 쿠키가 한개라도 있으면 실행
