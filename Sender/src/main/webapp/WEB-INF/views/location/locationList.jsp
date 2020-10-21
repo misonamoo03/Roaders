@@ -76,7 +76,7 @@ $(function(){
 				<nav>
 					${cookie.id.value}님 안녕하세요 | <input type="submit" formaction="logout"
 						formmethod="get" id="logoutBtn" value="로그아웃">
-					<input type="hidden" value="${User.SUSER_ID}" class="suser-id">
+					<input type="hidden" value="${cookie.id.value}" class="suser-id">
 				</nav>
 			</c:if>
 		</form>

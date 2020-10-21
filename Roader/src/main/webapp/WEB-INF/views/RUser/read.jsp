@@ -10,22 +10,15 @@
 <link rel="stylesheet" href="/resources/css/reset.css">
 <link rel="stylesheet" href="/resources/css/style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/resources/ruser/postcode.js"></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
-
-//A $( document ).ready() block.
-
 $(function(){
 	$( document ).ready(function() {
 		let emailTwo='@'+'${RUserVO.ruserEmail1[1]}';
-		let ruserEmail2= $("#ruserEmail2").val();
-		/*
-		$("#emailTwo option").each(function(){
-			if($(this).val()=="${RUserVO.ruserEmail1[1]}"){
-    			$(this).attr("selected","selected"); // attr적용안될경우 prop으로 
-    		}
-		});*/
+		let emailOne = $("#ruserEmailf").val+$("#emailTwo").val;
 		$("#emailTwo").val(emailTwo);
-		
+		$("#ruserEmail").val($("#ruserEmailf").val()+$("#emailTwo").val());
 		var ruserAgreOption = "${RUserVO.ruserAgreOption}";
 		if(ruserAgreOption == "Y"){
 			$("#option").prop('checked', true);
@@ -53,11 +46,6 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 	    	alert("이메일을 입력해주세요.");
 			$("#ruserEmail").focus();
 			return false
-		}
-		if ( !regExp2.test( $("#ruserEmail").val() ) ) {
-		      alert("잘못된 이메일입니다. 다시 기입해주세요.");
-		      $("#ruserEmail").val("");
-		      return false;
 		}
 		if ($("#ruserPcode").val()=="" ) {
 			alert("우편번호를 입력해주세요.");
@@ -127,7 +115,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
             <ul>
                 <li>상품관리</li>
                 <li>배송관리</li>
-                <li>회원정보</li>
+                <li><a h>회원정보</a></li>
             </ul>
         </nav>
 		</c:if>
@@ -143,33 +131,32 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
 			<aside class="aside">
 				<ul>
 					<li><a href="">회원정보 변경</a></li>
-					<li><a href="/PointPage?ruserId=${RUser.ruserId}">회원포인트</a></li>
+					<li><a href="/PointPage?ruserId=${cookie.id.value}">회원포인트</a></li>
 				</ul>
 			</aside>
 			<form>
-			<input type="hidden" name="ruserAgreOption" id="ruserAgreOption" value="${userVO.SUSER_AGRE_OPTION}">
+			<input type="hidden" name="ruserAgreOption" id="ruserAgreOption" value="${RUserVO.ruserAgreOption}">
 			<div class="sub-main">
 
 				아이디:	<input type="text" readonly="readonly" id="ruserId" name="ruserId" value="${RUserVO.ruserId}" size="40" > &nbsp;&nbsp;수정불가<br>
 				이름 :	<input type="text" name="ruserName" id="ruserName" value="${RUserVO.ruserName}" size="40" maxlength="10" ><br>
-				이메일 :	<input type="text" name="ruserEmail" id="ruserEmail" value="${RUserVO.ruserEmail1[0]}" size="40" >@
-				<input type="hidden" name="ruserEmail2" id="ruserEmail2" value="${RUserVO.ruserEmail1[1]}">
+				이메일 :	<input type="text" name="ruserEmailf" id="ruserEmailf" value="${RUserVO.ruserEmail1[0]}" size="40" >@
 				<select	name="emailTwo" id="emailTwo">
 					<option value="@naver.com">naver.com</option>
 					<option value="@gmail.com">gmail.com</option>
 					<option value="@daum.net">daum.net</option>
 					<option value="@nate.com">nate.com</option>
 				</select><br>
-				우편번호 :	<input type="text" name="ruserPostCode" id="ruserPostCode" value="${RUserVO.ruserPostCode}" size="40" ><br>
-				주소1 :	<input type="text" name="ruserAddress1" id="ruserAddress1" value="${RUserVO.ruserAddress1}" size="40" ><br>
-				주소2 :	<input type="text" name="ruserAddress2" id="ruserAddress2" value="${RUserVO.ruserAddress2}" size="40" ><br>
-				폰번호 :	<input type="text" name="rPhone" id="rPhone" value="${RUserVO.rPhone}" size="40" class="sphone"><br/>
+				<input name="ruserEmail" id="ruserEmail" type="hidden">
+				우편번호 :	<input type="text" class="zip required" name="ruserPostCode" readonly placeholder="우편번호" value="${RUserVO.ruserPostCode}"><button class="address-search-button">주소찾기</button><br> 
+				주소1 :	<input type="text" class="address-basic required" name="ruserAddress1" size="40" placeholder="주소" readonly="readonly" value="${RUserVO.ruserAddress1}"><br>
+				주소2 :	<input type="text" class="address-detail" name="ruserAddress2"	size="40" placeholder="상세 주소" value="${RUserVO.ruserAddress2}"><br>
+				폰번호 :	<input type="text" name="rPhone" id="rPhone" value="${RUserVO.rPhone}" size="40" class="sphone"><br>
+				
+				
 				<input type="checkbox" name="option" id="option"  value="Y"><a id="optionId"> 광고성 정보 수신 동의(선택)</a><br>
 				<input type="submit" formaction="modify" formmethod="post" id="updateBtn" value="수정완료" ><br>
 
-			   	<span>
-			   		
-            </span>
 			</div>
 		</section>
 		</form>

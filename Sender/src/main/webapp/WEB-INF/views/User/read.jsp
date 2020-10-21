@@ -86,7 +86,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
             <span class="font-color-orange">가는길에</span> @센더스
         </h1>
         <form>
-         <c:if test="${User == null }">
+         <c:if test="${cookid.id == null }">
             <nav>
                <ul>
                   <li><a href="/loginform">로그인</a></li>
@@ -94,9 +94,9 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
                </ul>
             </nav>
          </c:if>	
-		<c:if test="${User != null }">
+		<c:if test="${cookie.id != null }">
             <nav>
-          <a href="/read?SUSER_ID=${User.SUSER_ID}">${User.SUSER_ID}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
+          <a href="/read?SUSER_ID=${cookie.id.value}">${cookie.id.value}님 안녕하세요</a>  | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
             </nav>
       </div>
     <style>
@@ -117,7 +117,7 @@ var regExp2 =/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[
             <ul>
                   <li><a href="/itemList">상품관리</a></li>
                 <li><a href="/delivery/list">배송관리</a></li>
-                <li><a href="/read?SUSER_ID=${User.SUSER_ID}">회원관리</a></li>
+                <li><a href="/read?SUSER_ID=${cookie.id.value}">회원관리</a></li>
             </ul>
         </nav>
 		</c:if>
