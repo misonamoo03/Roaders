@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +80,7 @@ public class DeliveryController {
 		// 이후 미리 ListVO에 deliveryNumber 값을 세팅해준다.
 		DeliveryListVO dlvo = new DeliveryListVO();
 		dlvo.setDeliveryNumber(deliveryNumber);
+		
 		return deliveryService.selectPoint(dlvo);
 	}
 	
@@ -91,8 +94,10 @@ public class DeliveryController {
 	
 	@ResponseBody
 	@RequestMapping(value="/delivery/detail", method = RequestMethod.POST)
-	public DeliveryVO deliveryDetail(int deliveryNumber, DeliveryVO deliveryVO) throws Exception {
+	public DeliveryVO deliveryDetail(int deliveryNumber, DeliveryVO deliveryVO,
+			@CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
 
+		//deliveryVO.setRuserId(genderCookie.getValue());
 		deliveryVO = deliveryService.deliveryDetail(deliveryNumber);
 		
 		System.out.println(deliveryVO);

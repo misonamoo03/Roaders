@@ -16,7 +16,7 @@
 			<span class="font-color-orange">가는길에</span> @센더스
 		</h1>
 		<form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				<nav>
 					<ul>
 						<li><a href="/loginform">로그인</a></li>
@@ -24,32 +24,33 @@
 					</ul>
 				</nav>
 			</c:if>
-			<c:if test="${User != null }">
-				<nav>
-					${User.SUSER_ID}님 안녕하세요 | <input type="submit" formaction="logout"
-						formmethod="get" id="logoutBtn" value="로그아웃">
-				</nav>
+			<c:if test="${cookie.id != null }">
+				<img src="C:\Users\User\Desktop\1.jpg">${cookie.id.value}
+				 | <input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">
 			</c:if>
 		</form>
 	</header>  
 
     <main class="main">
         <form>
-			<c:if test="${User == null }">
+			<c:if test="${cookie.id == null }">
 				
 			</c:if>
-			<c:if test="${User != null }">
+			<c:if test="${cookie.id != null }">
 				<%@include file="../nav.jsp" %>
 			</c:if>
 		</form>
         <section class="main-container">
             <aside class="aside">
                 <ul>
-                    <li><a href="">전체배송</a></li>
-                    <li><a href="">배송중 상품</a></li>
-                    <li><a href="">배송완료 상품</a></li>
-                    <li><a href="">배송요청</a></li>
-                    <li><a href="">장소 관리</a></li>
+                    <li><a href="/deliveryList">전체배송</a></li>
+                    <li class="delivery-ing delivery-menu">
+                    	배송중 상품</li>
+                    <li class="delivery-complete delivery-menu">
+                    	배송완료 상품
+                    </li>
+                    <li><a href="/delivery/regist">배송요청</a></li>
+                    <li><a href="/location/locationList">장소 관리</a></li>
                 </ul>
             </aside>
             <div class="sub-main">

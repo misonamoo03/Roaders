@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES
 		(
 			(SELECT SUSER_NO FROM SENDUSER WHERE SUSER_ID = #{SUSER_ID}),
-			1, 
+			0, 
 			#{DELIVERY_PRICE}, 
 			#{MIN_PICKUP_TIME},
 			#{MIN_ARRIVE_TIME},
@@ -169,6 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 		FROM DEL_CONTENT_INFO I 
 			JOIN DEL_LOCATION_VIEW L ON I.DELIVERY_NUMBER = L.DELIVERY_NUMBER 
 			JOIN DELIVERY_MAN D ON I.DELIVERY_NUMBER = D.DELIVERY_NUMBER
+			
 	        WHERE I.DELIVERY_NUMBER > 0
 	        AND D.SUSER_NO = (SELECT SU.SUSER_NO FROM SENDUSER SU WHERE SU.SUSER_ID = #{suserId})
 		 ]]>
@@ -309,22 +310,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       			AND 
       				DC.RUSER_ID= R.RUSER_ID
    			) AS ruserDeliveryCnt,
-   			(
-      			SELECT 
-      				COUNT(RM.TOTAL_STAR) 
-				FROM 
-					REVIEW_MAN RM 
-				WHERE 
-					RM.RUSER_ID = R.RUSER_ID
-  			) AS reviewCount,
-   			(
-         		SELECT 
-         			SUM(RM.TOTAL_STAR)
-				FROM 
-					REVIEW_MAN RM 
-				WHERE 
-					RM.RUSER_ID = R.RUSER_ID
-  	 		)AS reviewTotalStar,
   	 		IFNULL(RG.RGRADE_CODE,'3') AS ruserGrade,
    			DC.PICKUP_TIME AS pickupTime,
    			DC.MESSAGE AS message,

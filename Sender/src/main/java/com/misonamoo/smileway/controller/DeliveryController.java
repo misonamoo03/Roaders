@@ -3,15 +3,20 @@ package com.misonamoo.smileway.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,21 +53,24 @@ public class DeliveryController {
 	private ItemService itemService;
 	
 	//@Resource(name="uploadPath")
-
-
-	private String uploadPath = "C:\\workspace\\spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\delivery\\resources";
+	private String uploadPath = "C:\\workspace\\spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Sender\\resources";
 
 	//C:\Users\User\Desktop\new project\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\TeamDelivery\resources
 	//private String uploadPath = "C:\\Users\\User\\Desktop\\new project\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\TeamDelivery\\resources";
 
 	
 	@RequestMapping(value="/delivery/regist", method = RequestMethod.GET)
-	public String regist(Model model) throws Exception {
+	public String regist(Model model, ItemVO itemVO,
+			@CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
+
+		
+		itemVO.setSUSER_ID(genderCookie.getValue());
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
+		System.out.println(catagoryList);
 		
 		return "/delivery/regist";
 	}
@@ -90,23 +98,24 @@ public class DeliveryController {
 		deliveryService.registDelInfo(deliveryVO);
 		deliveryService.registDelMethod(deliveryVO);
 		
-		return "redirect:/delivery/list";
+		return "redirect:/deliveryList";
 	}
 	
 	@RequestMapping(value="/deliveryList", method = RequestMethod.GET)
 	public String list(Model model, @ModelAttribute("cri") SearchCriteria cri,
-			HttpServletRequest req, RedirectAttributes rttr) throws Exception {
+			@CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
+
 		
-		HttpSession session = req.getSession();		
-		UserVO login = (UserVO)session.getAttribute("User");
-		
-		if(login != null && login.getSUSER_ID() != null ) {			
-			cri.setSuserId(login.getSUSER_ID());			
-		}
+		cri.setSuserId(genderCookie.getValue());
 		
 		ItemPageMaker pageMaker = new ItemPageMaker();
 		pageMaker.setCri(cri);
 		pageMaker.setTotalCount(deliveryService.countDelivery(cri));
+		model.addAttribute("page", cri.getPage());
+		model.addAttribute("perPageNum", cri.getPerPageNum());
+		model.addAttribute("searchType", cri.getSearchType());
+		model.addAttribute("keyword", cri.getKeyword());
+		model.addAttribute("deliveryState", cri.getDeliveryState());
 		model.addAttribute("pageMaker",pageMaker);
 		
 		List<DeliveryVO> list = deliveryService.deliveryList(cri);		
@@ -131,11 +140,11 @@ public class DeliveryController {
 	}
 	
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
-	public String edit(DeliveryVO deliveryVO, int DELIVERY_NUMBER, Model model) throws Exception {
+	public String edit(DeliveryVO deliveryVO, int DELIVERY_NUMBER, ItemVO itemVO, Model model) throws Exception {
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
         
 		deliveryVO = deliveryService.deliveryDetail(DELIVERY_NUMBER);
@@ -176,7 +185,7 @@ public class DeliveryController {
 		deliveryService.updateDelInfo(deliveryVO);
 		deliveryService.updateDelMethod(deliveryVO);
 		
-		return "redirect:/delivery/list";
+		return "redirect:/deliveryList";
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.GET)
@@ -194,19 +203,15 @@ public class DeliveryController {
 	
 	//상품 목록 팝업
 	@RequestMapping(value = "/delivery/itemList", method = RequestMethod.GET)
-	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, 
-			Model model, HttpServletRequest req, RedirectAttributes rttr)throws Exception{
+	public String openItemListPop(@ModelAttribute("cri") SearchCriteria cri, ItemVO itemVO,
+			Model model, @CookieValue(value="id",required=false)Cookie genderCookie) throws Exception {
+
 		
-		HttpSession session = req.getSession();		
-		UserVO login = (UserVO)session.getAttribute("User");
-		
-		if(login != null && login.getSUSER_ID() != null ) {	
-			cri.setSuserId(login.getSUSER_ID());			
-		}
+		cri.setSuserId(genderCookie.getValue());
 		
 		//카테고리 조회하기 위해서 쓰는것
 		List<ItemVO> catagoryList = null;
-		catagoryList = itemService.catagoryList();
+		catagoryList = itemService.catagoryList(itemVO);
 		model.addAttribute("catagoryList", JSONArray.fromObject(catagoryList));
 		
 		List<ItemVO> list = itemService.listItemPop(cri);

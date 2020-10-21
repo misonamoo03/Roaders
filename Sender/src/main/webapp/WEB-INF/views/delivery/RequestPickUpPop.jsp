@@ -44,7 +44,7 @@
                 success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                     close();
                     window.opener.close();
-                    opener.parent.location.reload();
+                    opener.parent.opener.parent.location.reload();
                 },
                 error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                     

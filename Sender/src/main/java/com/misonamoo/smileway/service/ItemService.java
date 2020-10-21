@@ -12,7 +12,7 @@ public interface ItemService {
 	public void registCatagory(ItemVO item)throws Exception;
 	
 	//카테고리 조회
-	public List<ItemVO> catagoryList()throws Exception;
+	public List<ItemVO> catagoryList(ItemVO vo)throws Exception;
 	
 	//상품 등록
 	public void registItem(ItemVO item)throws Exception;

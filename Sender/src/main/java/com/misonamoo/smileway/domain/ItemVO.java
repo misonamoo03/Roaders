@@ -3,7 +3,8 @@ package com.misonamoo.smileway.domain;
 public class ItemVO {
 	
 	private String CATAGORY_NAME,
-	 			   SUSER_N0,
+				   SUSER_ID,
+	 			   SUSER_NO,
 	 			   CATAGORY_ID,
 	 			   ITEM_NO,
 	 			   ITEM_NAME,
@@ -32,13 +33,21 @@ public class ItemVO {
 	public void setCATAGORY_NAME(String CATAGORY_NAME) {
 		this.CATAGORY_NAME = CATAGORY_NAME;
 	}
-
-	public String getSUSER_N0() {
-		return SUSER_N0;
+	
+	public String getSUSER_ID() {
+		return SUSER_ID;
 	}
 
-	public void setSUSER_N0(String SUSER_N0) {
-		this.SUSER_N0 = SUSER_N0;
+	public void setSUSER_ID(String sUSER_ID) {
+		SUSER_ID = sUSER_ID;
+	}
+
+	public String getSUSER_NO() {
+		return SUSER_NO;
+	}
+
+	public void setSUSER_NO(String sUSER_NO) {
+		SUSER_NO = sUSER_NO;
 	}
 
 	public String getCATAGORY_ID() {
@@ -201,18 +210,5 @@ public class ItemVO {
 	public void setITEM_DEL_COUNT(String iTEM_DEL_COUNT) {
 		ITEM_DEL_COUNT = iTEM_DEL_COUNT;
 	}
-
-	@Override
-	public String toString() {
-		return "ItemVO [CATAGORY_NAME=" + CATAGORY_NAME + ", SUSER_N0=" + SUSER_N0 + ", CATAGORY_ID=" + CATAGORY_ID
-				+ ", ITEM_NO=" + ITEM_NO + ", ITEM_NAME=" + ITEM_NAME + ", ITEM_TYPE=" + ITEM_TYPE + ", ITEM_PRICE="
-				+ ITEM_PRICE + ", ITEM_WIDTH=" + ITEM_WIDTH + ", ITEM_LENGTH=" + ITEM_LENGTH + ", ITEM_HEIGHT="
-				+ ITEM_HEIGHT + ", ITEM_WEIGHT=" + ITEM_WEIGHT + ", ITEM_PICTURE=" + ITEM_PICTURE + ", ITEM_PICTURE_2="
-				+ ITEM_PICTURE_2 + ", ITEM_PICTURE_3=" + ITEM_PICTURE_3 + ", ITEM_EXPLAIN=" + ITEM_EXPLAIN
-				+ ", ITEM_WARN=" + ITEM_WARN + ", ITEM_REG_DATE=" + ITEM_REG_DATE + ", ITEM_USE=" + ITEM_USE
-				+ ", ITEM_UPDATE=" + ITEM_UPDATE + ", ITEM_PICTURE_Thum=" + ITEM_PICTURE_Thum + ", ITEM_USEAGE="
-				+ ITEM_USEAGE + ", ITEM_DEL_COUNT=" + ITEM_DEL_COUNT + "]";
-	}
-
 	
 }

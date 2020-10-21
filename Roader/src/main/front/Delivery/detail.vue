@@ -366,10 +366,12 @@
             let self = this;              
 
             var params = location.href.substr(location.href.indexOf("/") + 1);
-            var sval = "";
             params = params.split("/");
 
-            console.log(this.$session.getAll());
+            
+            var ruserId = document.cookie.substr(document.cookie.indexOf("=") + 1);
+            ruserId = ruserId.split("/");
+            console.log();
 
             axios({
                method: 'post',
@@ -388,16 +390,17 @@
                   + parseInt(res.data.delContentLength);
                self.delMethodCode = res.data.delMethodCode;
                self.deliveryNumber = res.data.deliveryNumber;
+               self.ruserId = ruserId[0];
             });
             
-            axios({
-               method: 'get',
-               url: '/loginChk',
-               headers: {'Content-Type': 'application/json'}
-            })
-            .then(function(res){
-               self.ruserId = res.data.ruserId;
-            });
+            // axios({
+            //    method: 'get',
+            //    url: '/loginChk',
+            //    headers: {'Content-Type': 'application/json'}
+            // })
+            // .then(function(res){
+            //    self.ruserId = res.data.ruserId;
+            // });
          },
 
          requestPop: function(e){

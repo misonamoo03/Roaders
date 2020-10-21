@@ -32,7 +32,7 @@
 	            <span class="font-color-orange">가는길에</span> @센더스
 	        </h1>
 	        <form>
-				<c:if test="${RUser == null }">
+				<c:if test="${cookie.id == null }">
 		            <nav>
 		               <ul>
 		                  <li><a href="/loginform">로그인</a></li>
@@ -40,11 +40,11 @@
 		               </ul>
 		            </nav>
 		         </c:if>
-				<c:if test="${RUser != null }">
+				<c:if test="${cookie.id != null }">
 		        	<nav>
 		          		<img src="C:\Users\User\Desktop\1.jpg">
-		          		<a href="/read?ruserId=${RUser.ruserId}">
-		          			<span id="ruser-span">${RUser.ruserId}</span>
+		          		<a href="/read?ruserId=${cookie.id.value}">
+		          			<span id="ruser-span">${cookie.id.value}</span>
 		          		</a> 
 		          		 | 
 		          		<input type="submit" formaction="logout" formmethod="get" id="logoutBtn" value="로그아웃">

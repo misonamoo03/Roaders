@@ -13,7 +13,7 @@ public interface ItemDAO {
 	public void insertCataGory(ItemVO vo)throws Exception;
 	
 	//카테고리 목록 출력
-	public List<ItemVO> catagoryList()throws Exception;	
+	public List<ItemVO> catagoryList(ItemVO vo)throws Exception;	
 	
 	//상품 등록
 	public void registItem(ItemVO vo)throws Exception;
